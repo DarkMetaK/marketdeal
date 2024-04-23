@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "319391245712",
+    "project_id": "marketdeal-android",
+    "storage_bucket": "marketdeal-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319391245712:android:0f32a27e42fe04ccd6bf15",
+        "android_client_info": {
+          "package_name": "br.com.marketdeal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA1R2OBM_zend2pB3QyLbhK8tpWN3En24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
