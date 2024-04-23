@@ -18,12 +18,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/sign_in_image" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +28,35 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/activity_sign_in_email"
+                android:id="@+id/activity_sign_up_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_input"
+                android:hint="Nome"
+                android:inputType="textCapWords"
+                android:lineHeight="24sp"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:textColorHint="@color/gray_7"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/activity_sign_up_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/custom_input"
+                android:hint="Telefone"
+                android:inputType="phone"
+                android:lineHeight="24sp"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:textColorHint="@color/gray_7"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/activity_sign_up_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
@@ -48,7 +70,7 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/activity_sign_in_password"
+                android:id="@+id/activity_sign_up_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
@@ -81,18 +103,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lineHeight="24sp"
-                    android:text="Não possue conta? "
+                    android:text="Já possui conta? "
                     android:textColor="@color/gray_12"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/activity_sign_in_redirect_link"
+                    android:id="@+id/activity_sign_up_redirect_link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:lineHeight="24sp"
                     android:onClick="onClick"
-                    android:text="Cadastre-se"
+                    android:text="Realize login"
                     android:textColor="@color/primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
