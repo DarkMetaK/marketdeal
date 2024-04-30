@@ -1,9 +1,7 @@
 package br.com.marketdeal.activity
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -22,6 +20,7 @@ class SignUpActivity : AppCompatActivity() {
     private val phone by lazy { findViewById<EditText>(R.id.activity_sign_up_phone) }
     private val password by lazy { findViewById<TextView>(R.id.activity_sign_up_password) }
     private val registerBtn by lazy { findViewById<Button>(R.id.activity_sign_up_register_btn) }
+    private val signInBtn by lazy { findViewById<TextView>(R.id.activity_sign_up_redirect_link) }
 
     private val auth by lazy { Firebase.auth }
     private val database by lazy { Firebase.database.reference }
@@ -32,6 +31,7 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(R.layout.activity_sign_up)
 
         configRegisterButton()
+        configSignInLink()
     }
 
     private fun configRegisterButton() {
@@ -40,11 +40,29 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+    private fun configSignInLink() {
+        signInBtn.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
     private fun createAccount() {
         val emailStr = email.text.toString()
         var nameStr = name.text.toString()
         var phoneStr = phone.text.toString()
         val passwordStr = password.text.toString()
+
+        if (emailStr.isNullOrBlank() || passwordStr.isNullOrBlank() || phoneStr.isNullOrBlank() || passwordStr.isNullOrBlank()) {
+            // Mostrar erros
+            Toast.makeText(
+                baseContext,
+                "Preencha todos os campos",
+                Toast.LENGTH_SHORT,
+            ).show()
+
+            return
+        }
 
         registerNewUser(emailStr, nameStr, phoneStr, passwordStr)
         registerAuthentication(emailStr, passwordStr)
@@ -60,14 +78,13 @@ class SignUpActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Log.d(TAG, "createUserWithEmail:success")
                     val intent = Intent(this, HomeActivity::class.java)
+                    finish()
                     startActivity(intent)
                 } else {
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         baseContext,
-                        "Authentication failed.",
+                        "Falha na criação do usuário.",
                         Toast.LENGTH_SHORT,
                     ).show()
                 }

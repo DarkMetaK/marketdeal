@@ -1,10 +1,7 @@
 package br.com.marketdeal.activity
 
-import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -49,19 +46,27 @@ class SignInActivity : AppCompatActivity() {
         val emailStr = email.text.toString()
         val passwordStr = password.text.toString()
 
+        if (emailStr.isNullOrBlank() || passwordStr.isNullOrBlank()) {
+            // Mostrar erros
+            Toast.makeText(
+                baseContext,
+                "Preencha todos os campos",
+                Toast.LENGTH_SHORT,
+            ).show()
+
+            return
+        }
+
         auth.signInWithEmailAndPassword(emailStr, passwordStr)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Autenticado com sucesso, redirecionar para home
-                    Log.d(TAG, "signInWithEmail:success")
                     val intent = Intent(this, HomeActivity::class.java)
+                    finish()
                     startActivity(intent)
                 } else {
-                    // Erro ao fazer login
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
                     Toast.makeText(
                         baseContext,
-                        "Authentication failed.",
+                        "Usuário não encontrado com este e-mail e senha.",
                         Toast.LENGTH_SHORT,
                     ).show()
                 }
