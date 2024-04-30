@@ -46,15 +46,27 @@ class SignInActivity : AppCompatActivity() {
         val emailStr = email.text.toString()
         val passwordStr = password.text.toString()
 
+        if (emailStr.isNullOrBlank() || passwordStr.isNullOrBlank()) {
+            // Mostrar erros
+            Toast.makeText(
+                baseContext,
+                "Preencha todos os campos",
+                Toast.LENGTH_SHORT,
+            ).show()
+
+            return
+        }
+
         auth.signInWithEmailAndPassword(emailStr, passwordStr)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val intent = Intent(this, HomeActivity::class.java)
+                    finish()
                     startActivity(intent)
                 } else {
                     Toast.makeText(
                         baseContext,
-                        "Authentication failed.",
+                        "Usuário não encontrado com este e-mail e senha.",
                         Toast.LENGTH_SHORT,
                     ).show()
                 }

@@ -16,10 +16,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    override fun onStart() {
+    /*override fun onStart() {
         super.onStart()
         redirectIfAuthenticated()
     }
+
+    // Era pra redirecionar caso o usuário esteja logado
+    // Mas desconfio que ele roda antes do firebase retornar o resultado
+    // Pendente
 
     private fun redirectIfAuthenticated() {
         val currentUser = auth.currentUser
@@ -31,6 +35,6 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
-    }
+    }*/
 
 }
