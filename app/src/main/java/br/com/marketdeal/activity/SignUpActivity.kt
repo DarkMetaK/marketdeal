@@ -49,11 +49,11 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun createAccount() {
         val emailStr = email.text.toString()
-        var nameStr = name.text.toString()
-        var phoneStr = phone.text.toString()
+        val nameStr = name.text.toString()
+        val phoneStr = phone.text.toString()
         val passwordStr = password.text.toString()
 
-        if (emailStr.isNullOrBlank() || passwordStr.isNullOrBlank() || phoneStr.isNullOrBlank() || passwordStr.isNullOrBlank()) {
+        if (emailStr.isBlank() || passwordStr.isBlank() || phoneStr.isBlank() || passwordStr.isBlank()) {
             // Mostrar erros
             Toast.makeText(
                 baseContext,
@@ -64,20 +64,17 @@ class SignUpActivity : AppCompatActivity() {
             return
         }
 
-        registerNewUser(emailStr, nameStr, phoneStr, passwordStr)
-        registerAuthentication(emailStr, passwordStr)
+        registerUser(emailStr, passwordStr, nameStr, phoneStr)
     }
 
-    private fun registerNewUser(email: String, name: String, phone: String, password: String) {
-        val user = User(email, name, phone, password)
-
-        database.child("users").child(name).setValue(user)
-    }
-
-    private fun registerAuthentication(email: String, password: String) {
+    private fun registerUser(email: String, password: String, name: String, phone: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    val uuid = auth.currentUser!!.uid
+                    val user = User(uuid, email, name, phone, password)
+                    database.child("users").child(uuid).setValue(user)
+
                     val intent = Intent(this, HomeActivity::class.java)
                     finish()
                     startActivity(intent)
