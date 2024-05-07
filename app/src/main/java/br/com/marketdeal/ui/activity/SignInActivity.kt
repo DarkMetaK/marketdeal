@@ -1,4 +1,4 @@
-package br.com.marketdeal.activity
+package br.com.marketdeal.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -60,7 +60,7 @@ class SignInActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(emailStr, passwordStr)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val intent = Intent(this, HomeActivity::class.java)
+                    val intent = Intent(this, MainActivity::class.java)
                     finish()
                     startActivity(intent)
                 } else {

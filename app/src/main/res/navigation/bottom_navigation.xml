@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_navigation"
+    app:startDestination="@+id/mi_home">
+
+    <fragment
+        android:id="@+id/mi_home"
+        android:name="br.com.marketdeal.ui.fragment.HomeFragment"
+        android:label="fragment_home" />
+
+    <fragment
+        android:id="@+id/mi_offer"
+        android:name="br.com.marketdeal.ui.fragment.OfferFragment"
+        android:label="fragment_offer" />
+
+</navigation>
