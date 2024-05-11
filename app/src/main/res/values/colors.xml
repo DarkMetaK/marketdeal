@@ -13,7 +13,8 @@
     <color name="gray_10">#2E2E2E</color>
     <color name="gray_11">#1A1A1A</color>
     <color name="gray_12">#0E0E0E</color>
-
+    
+    <color name="destructive">#B64A40</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
