@@ -1,4 +1,4 @@
-package br.com.marketdeal.activity
+package br.com.marketdeal.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -75,7 +75,7 @@ class SignUpActivity : AppCompatActivity() {
                     val user = User(uuid, email, name, phone, password)
                     database.child("users").child(uuid).setValue(user)
 
-                    val intent = Intent(this, HomeActivity::class.java)
+                    val intent = Intent(this, MainActivity::class.java)
                     finish()
                     startActivity(intent)
                 } else {
