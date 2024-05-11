@@ -13,5 +13,17 @@
         android:id="@+id/mi_offer"
         android:name="br.com.marketdeal.ui.fragment.OfferFragment"
         android:label="fragment_offer" />
+    <fragment
+        android:id="@+id/mi_profile"
+        android:name="br.com.marketdeal.ui.fragment.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/mi_store"
+        android:name="br.com.marketdeal.ui.fragment.StoreFragment"
+        android:label="StoreFragment" />
+    <fragment
+        android:id="@+id/mi_product"
+        android:name="br.com.marketdeal.ui.fragment.ProductFragment"
+        android:label="ProductFragment" />
 
 </navigation>

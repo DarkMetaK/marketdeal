@@ -3,14 +3,27 @@
 
     <item
         android:id="@+id/mi_home"
-        android:title="Home"
         android:icon="@drawable/ic_home"
-        />
+        android:title="Home" />
 
     <item
         android:id="@+id/mi_offer"
-        android:title="Oferta"
         android:icon="@drawable/ic_offer"
-        />
+        android:title="Oferta" />
+
+    <item
+        android:id="@+id/mi_product"
+        android:icon="@drawable/ic_bag"
+        android:title="Produto" />
+
+    <item
+        android:id="@+id/mi_store"
+        android:icon="@drawable/ic_store"
+        android:title="Loja" />
+
+    <item
+        android:id="@+id/mi_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Perfil" />
 
 </menu>
