@@ -1,6 +1,7 @@
 package br.com.marketdeal.ui.activity
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -21,6 +22,7 @@ class SignUpActivity : AppCompatActivity() {
     private val password by lazy { findViewById<TextView>(R.id.activity_sign_up_password) }
     private val registerBtn by lazy { findViewById<Button>(R.id.activity_sign_up_register_btn) }
     private val signInBtn by lazy { findViewById<TextView>(R.id.activity_sign_up_redirect_link) }
+    private lateinit var sp: SharedPreferences
 
     private val auth by lazy { Firebase.auth }
     private val database by lazy { Firebase.database.reference }
@@ -29,7 +31,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         setContentView(R.layout.activity_sign_up)
-
+        sp = getSharedPreferences("MarketDeal_crud", MODE_PRIVATE)
         configRegisterButton()
         configSignInLink()
     }
@@ -74,7 +76,14 @@ class SignUpActivity : AppCompatActivity() {
                     val uuid = auth.currentUser!!.uid
                     val user = User(uuid, email, name, phone, password)
                     database.child("users").child(uuid).setValue(user)
-
+                    sp.edit().apply{
+                        putString("email",email)
+                        commit()
+                    }
+                    sp.edit().apply{
+                        putString("password",password)
+                        commit()
+                    }
                     val intent = Intent(this, MainActivity::class.java)
                     finish()
                     startActivity(intent)
