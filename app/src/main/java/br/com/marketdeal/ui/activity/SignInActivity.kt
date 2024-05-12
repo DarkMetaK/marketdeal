@@ -22,7 +22,7 @@ class SignInActivity : AppCompatActivity() {
     private val auth by lazy { Firebase.auth }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        previousSignIn()
+        //previousSignIn()
         super.onCreate(savedInstanceState)
         sp = getSharedPreferences("MarketDeal_crud", MODE_PRIVATE)
 
@@ -84,7 +84,7 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
     }
-
+    /*
     private fun previousSignIn(){
         val sp = this.getSharedPreferences("MarketDeal_crud", MODE_PRIVATE)
         val emailStr = sp.getString("email","[]").toString()
@@ -98,6 +98,6 @@ class SignInActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-    }
+    }*/
 
 }
