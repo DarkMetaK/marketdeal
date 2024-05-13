@@ -85,7 +85,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/activit_profile_email"
+                    android:id="@+id/activity_profile_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"

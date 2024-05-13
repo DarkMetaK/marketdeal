@@ -54,7 +54,6 @@ class SignUpActivity : AppCompatActivity() {
         val passwordStr = password.text.toString()
 
         if (emailStr.isBlank() || passwordStr.isBlank() || phoneStr.isBlank() || passwordStr.isBlank()) {
-            // Mostrar erros
             Toast.makeText(
                 baseContext,
                 "Preencha todos os campos",
