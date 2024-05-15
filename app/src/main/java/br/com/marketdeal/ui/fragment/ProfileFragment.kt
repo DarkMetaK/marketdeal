@@ -1,5 +1,6 @@
 package br.com.marketdeal.ui.fragment
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import br.com.marketdeal.R
 import br.com.marketdeal.model.User
 import br.com.marketdeal.ui.activity.SignInActivity
+import com.google.android.play.core.integrity.ao
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -86,7 +88,7 @@ class ProfileFragment : Fragment() {
 
     private fun configDeleteBtn() {
         deleteBtn.setOnClickListener {
-            logout()
+            deleteDialog()
         }
     }
 
@@ -128,6 +130,45 @@ class ProfileFragment : Fragment() {
                 ).show()
             }
         }
+    }
+
+    private fun deleteUser(){
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.delete()
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Perfil deletado com sucesso!",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                    database.child(userId.toString()).removeValue()
+                } else {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Falha ao remover usuario",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+    }
+
+    private fun deleteDialog(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        builder
+            .setMessage("Deseja realmente apagar sua conta?")
+            .setTitle("Exclusão de conta")
+            .setPositiveButton("Confirmar") { dialog, which ->
+                deleteUser()
+                val intent = Intent(requireActivity(), SignInActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+            .setNegativeButton("Cancelar") { dialog, which ->
+            }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     private fun logout() {
