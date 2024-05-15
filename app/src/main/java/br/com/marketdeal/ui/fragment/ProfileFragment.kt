@@ -1,5 +1,6 @@
 package br.com.marketdeal.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.marketdeal.R
 import br.com.marketdeal.model.User
+import br.com.marketdeal.ui.activity.SignInActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,13 +23,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class ProfileFragment : Fragment() {
-    private lateinit var name: EditText
-    private lateinit var phone: EditText
-    private lateinit var email: EditText
-    private lateinit var password: EditText
-    private lateinit var updateBtn: Button
-    private lateinit var deleteBtn: Button
-
     private val userId by lazy { Firebase.auth.currentUser?.uid ?: null }
     private val database by lazy { Firebase.database.getReference("users") }
     private val userTableRef by lazy { userId?.let { database.child(it) } }
@@ -34,7 +30,10 @@ class ProfileFragment : Fragment() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val user = dataSnapshot.getValue<User>()
 
+            Log.i("retrieved-user", "onDataChange: $user")
+
             if (user != null) {
+                Log.i("not-null user", "onDataChange: $user")
                 loadUserData(user)
             }
         }
@@ -44,16 +43,28 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private lateinit var name: EditText
+    private lateinit var phone: EditText
+    private lateinit var email: EditText
+    private lateinit var password: EditText
+    private lateinit var updateBtn: Button
+    private lateinit var deleteBtn: Button
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater!!.inflate(R.layout.activity_profile, container, false)
+
         initializeFields(view)
         configUpdateBtn()
+        configDeleteBtn()
 
-        userTableRef?.addValueEventListener(userListener)
+        userTableRef.let {
+            userTableRef?.addValueEventListener(userListener)
+        }
+
         return view
     }
 
@@ -68,10 +79,22 @@ class ProfileFragment : Fragment() {
 
     private fun configUpdateBtn() {
         updateBtn.setOnClickListener {
-            Log.i("Testando se clicou", "configUpdateBtn: |Teste")
             val user = createUser()
             updateUser(user)
         }
+    }
+
+    private fun configDeleteBtn() {
+        deleteBtn.setOnClickListener {
+            logout()
+        }
+    }
+
+    private fun loadUserData(user: User) {
+        name.setText(user.name)
+        phone.setText(user.phone)
+        email.setText(user.email)
+        password.setText(user.password)
     }
 
     private fun createUser(): User {
@@ -81,13 +104,6 @@ class ProfileFragment : Fragment() {
         val passwordStr = password.text.toString()
 
         return User(userId!!, emailStr, nameStr, phoneStr, passwordStr)
-    }
-
-    private fun loadUserData(user: User) {
-        name.setText(user.name)
-        phone.setText(user.phone)
-        email.setText(user.email)
-        password.setText(user.password)
     }
 
     private fun updateUser(user: User) {
@@ -111,6 +127,14 @@ class ProfileFragment : Fragment() {
                     Toast.LENGTH_SHORT,
                 ).show()
             }
+        }
+    }
+
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut().let {
+            val intent = Intent(requireActivity(), SignInActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
         }
     }
 }
