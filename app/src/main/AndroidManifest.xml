@@ -13,13 +13,14 @@
         android:theme="@style/Theme.MarketDeal"
         tools:targetApi="31">
         <activity
-            android:name="br.com.marketdeal.ui.activity.SignInActivity"
+            android:name="br.com.marketdeal.ui.activity.LoadingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="br.com.marketdeal.ui.activity.SignInActivity" />
         <activity android:name="br.com.marketdeal.ui.activity.SignUpActivity" />
         <activity android:name="br.com.marketdeal.ui.activity.MainActivity" />
     </application>
