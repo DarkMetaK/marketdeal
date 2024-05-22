@@ -40,14 +40,29 @@
             android:layout_marginVertical="40dp"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineHeight="28sp"
-                android:text="Seu Perfil"
-                android:textColor="@color/gray_12"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:lineHeight="28sp"
+                    android:text="Seu Perfil"
+                    android:textColor="@color/gray_12"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/activity_profile_logout_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/cardview_dark_background"
+                    android:text="Sair" />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,7 +131,7 @@
                     android:id="@+id/activity_profile_update_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+
                     android:backgroundTint="@color/primary"
                     android:lineHeight="24sp"
                     android:paddingVertical="12dp"

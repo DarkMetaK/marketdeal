@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import br.com.marketdeal.R
 import br.com.marketdeal.model.User
 import br.com.marketdeal.ui.activity.SignInActivity
-import com.google.android.play.core.integrity.ao
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -32,10 +31,7 @@ class ProfileFragment : Fragment() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val user = dataSnapshot.getValue<User>()
 
-            Log.i("retrieved-user", "onDataChange: $user")
-
             if (user != null) {
-                Log.i("not-null user", "onDataChange: $user")
                 loadUserData(user)
             }
         }
@@ -49,6 +45,7 @@ class ProfileFragment : Fragment() {
     private lateinit var phone: EditText
     private lateinit var email: EditText
     private lateinit var password: EditText
+    private lateinit var logoutBtn: Button
     private lateinit var updateBtn: Button
     private lateinit var deleteBtn: Button
 
@@ -60,6 +57,7 @@ class ProfileFragment : Fragment() {
         val view = inflater!!.inflate(R.layout.activity_profile, container, false)
 
         initializeFields(view)
+        configLogoutBtn()
         configUpdateBtn()
         configDeleteBtn()
 
@@ -75,8 +73,15 @@ class ProfileFragment : Fragment() {
         phone = view.findViewById(R.id.activity_profile_phone)
         email = view.findViewById(R.id.activity_profile_email)
         password = view.findViewById(R.id.activity_profile_password)
+        logoutBtn = view.findViewById(R.id.activity_profile_logout_btn)
         updateBtn = view.findViewById(R.id.activity_profile_update_btn)
         deleteBtn = view.findViewById(R.id.activity_profile_delete_btn)
+    }
+
+    private fun configLogoutBtn() {
+        logoutBtn.setOnClickListener {
+            logout()
+        }
     }
 
     private fun configUpdateBtn() {
@@ -132,7 +137,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun deleteUser(){
+    private fun deleteUser() {
         val user = FirebaseAuth.getInstance().currentUser
         user?.delete()
             ?.addOnCompleteListener { task ->
@@ -153,7 +158,7 @@ class ProfileFragment : Fragment() {
             }
     }
 
-    private fun deleteDialog(){
+    private fun deleteDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         builder
             .setMessage("Deseja realmente apagar sua conta?")
