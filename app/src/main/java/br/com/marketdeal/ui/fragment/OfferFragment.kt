@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import br.com.marketdeal.R
 import com.google.firebase.database.DataSnapshot
@@ -45,7 +46,7 @@ class OfferFragment : Fragment() {
         }
     }
 
-    private lateinit var productField: AutoCompleteTextView
+    private lateinit var productField: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +62,7 @@ class OfferFragment : Fragment() {
 
     private fun configProductsAutoComplete(view: View) {
         productField = view.findViewById(R.id.activity_offer_product)
-        productField.setAdapter(productsAutoCompleteAdapter)
+        productField.adapter = productsAutoCompleteAdapter
     }
 
 
