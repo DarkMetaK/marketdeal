@@ -26,6 +26,14 @@ class OfferFragment : Fragment() {
             )
         }
     }
+    private val marketsAutoCompleteAdapter by lazy {
+        context?.let {
+            ArrayAdapter<String>(
+                it,
+                android.R.layout.simple_list_item_1
+            )
+        }
+    }
 
     private val database by lazy { Firebase.database.reference }
     private val productListener = object : ValueEventListener {
@@ -45,8 +53,26 @@ class OfferFragment : Fragment() {
             Log.w("firebase", "loadProducts:onCancelled", databaseError.toException())
         }
     }
+    private val marketListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            //Basically, this says "For each DataSnapshot *Data* in dataSnapshot, do what's inside the method.
+            for (suggestionSnapshot in dataSnapshot.getChildren()) {
+                //Get the suggestion by childing the key of the string you want to get.
+                val suggestion = suggestionSnapshot.child("name").getValue(
+                    String::class.java
+                )
+                //Add the retrieved string to the list
+                marketsAutoCompleteAdapter?.add(suggestion)
+            }
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+            Log.w("firebase", "loadProducts:onCancelled", databaseError.toException())
+        }
+    }
 
     private lateinit var productField: Spinner
+    private lateinit var marketField: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,13 +82,18 @@ class OfferFragment : Fragment() {
         val view = inflater!!.inflate(R.layout.activity_offer, container, false)
 
         database.child("products").addValueEventListener(productListener)
-        configProductsAutoComplete(view)
+        database.child("markets").addValueEventListener(marketListener)
+        configAutoCompletes(view)
+
         return view
     }
 
-    private fun configProductsAutoComplete(view: View) {
+    private fun configAutoCompletes(view: View) {
         productField = view.findViewById(R.id.activity_offer_product)
         productField.adapter = productsAutoCompleteAdapter
+
+        marketField = view.findViewById(R.id.activity_offer_market)
+        marketField.adapter = marketsAutoCompleteAdapter
     }
 
 

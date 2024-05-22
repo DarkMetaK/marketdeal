@@ -58,16 +58,13 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <AutoCompleteTextView
+                <Spinner
                     android:id="@+id/activity_offer_market"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
                     android:hint="Mercado"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
                     android:textColorHint="@color/gray_7"
                     android:textSize="16sp" />
 
