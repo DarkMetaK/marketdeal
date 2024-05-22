@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import br.com.marketdeal.R
@@ -16,25 +15,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-
 class OfferFragment : Fragment() {
-    private val productsAutoCompleteAdapter by lazy {
-        context?.let {
-            ArrayAdapter<String>(
-                it,
-                android.R.layout.simple_list_item_1
-            )
-        }
-    }
-    private val marketsAutoCompleteAdapter by lazy {
-        context?.let {
-            ArrayAdapter<String>(
-                it,
-                android.R.layout.simple_list_item_1
-            )
-        }
-    }
-
     private val database by lazy { Firebase.database.reference }
     private val productListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -72,7 +53,9 @@ class OfferFragment : Fragment() {
     }
 
     private lateinit var productField: Spinner
+    private lateinit var productsAutoCompleteAdapter: ArrayAdapter<String>
     private lateinit var marketField: Spinner
+    private lateinit var marketsAutoCompleteAdapter: ArrayAdapter<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,17 +64,28 @@ class OfferFragment : Fragment() {
     ): View? {
         val view = inflater!!.inflate(R.layout.activity_offer, container, false)
 
+        configProductAutoComplete(view)
+        configMarketAutoComplete(view)
         database.child("products").addValueEventListener(productListener)
         database.child("markets").addValueEventListener(marketListener)
-        configAutoCompletes(view)
 
         return view
     }
 
-    private fun configAutoCompletes(view: View) {
+    private fun configProductAutoComplete(view: View) {
+        productsAutoCompleteAdapter = ArrayAdapter(
+            view.context,
+            android.R.layout.simple_list_item_1
+        )
         productField = view.findViewById(R.id.activity_offer_product)
         productField.adapter = productsAutoCompleteAdapter
+    }
 
+    private fun configMarketAutoComplete(view: View) {
+        marketsAutoCompleteAdapter = ArrayAdapter(
+            view.context,
+            android.R.layout.simple_list_item_1
+        )
         marketField = view.findViewById(R.id.activity_offer_market)
         marketField.adapter = marketsAutoCompleteAdapter
     }
