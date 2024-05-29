@@ -105,43 +105,64 @@ class OfferFragment : Fragment() {
     private fun configSubmitBtn() {
         submitBtn.setOnClickListener {
             val offer = createOffer()
-            database.child("offers").child(offer.id).setValue(offer)
-                .addOnSuccessListener {
-                    Toast.makeText(
-                        requireActivity(),
-                        "Oferta criada com sucesso!",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(
-                        requireActivity(),
-                        "Falha ao criar oferta, por favor tente novamente!",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
+
+            if (offer != null) {
+                database.child("offers").child(offer.id).setValue(offer)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Oferta anunciada com sucesso!",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                        cleanFields()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Falha ao anunciar oferta, por favor tente novamente!",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+            }
         }
     }
 
-    private fun createOffer(): Offer {
+    private fun createOffer(): Offer? {
         val sizeStr = size.text.toString()
-        val originalPriceValue = originalPrice.text.toString().toDouble()
-        val currentPriceValue = currentPrice.text.toString().toDouble()
+        val originalPriceStr = originalPrice.text.toString()
+        val currentPriceStr = currentPrice.text.toString()
         val observationsStr = observations.text.toString()
         val marketId = marketList[marketSpinner.selectedItemId.toInt()].id
         val productId = productList[productSpinner.selectedItemId.toInt()].id
         val userId = auth.currentUser!!.uid
 
+        if (sizeStr.isEmpty() || originalPriceStr.isEmpty() || currentPriceStr.isEmpty() || marketId.isEmpty() || productId.isEmpty()) {
+            Toast.makeText(
+                requireActivity(),
+                "Preencha todos os campos",
+                Toast.LENGTH_SHORT,
+            ).show()
+
+            return null
+        }
+
         return Offer(
             UUID.randomUUID().toString(),
             sizeStr,
-            originalPriceValue,
-            currentPriceValue,
+            originalPriceStr.toDouble(),
+            currentPriceStr.toDouble(),
             observationsStr,
             marketId,
             productId,
             userId
         )
+    }
+
+    private fun cleanFields() {
+        size.setText("")
+        originalPrice.setText("")
+        currentPrice.setText("")
+        observations.setText("")
     }
 
     private fun configProductAutoComplete(view: View) {
