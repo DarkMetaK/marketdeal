@@ -129,7 +129,7 @@ class OfferFragment : Fragment() {
         val currentPriceValue = currentPrice.text.toString().toDouble()
         val observationsStr = observations.text.toString()
         val marketId = marketList[marketSpinner.selectedItemId.toInt()].id
-        val productId = productList[marketSpinner.selectedItemId.toInt()].id
+        val productId = productList[productSpinner.selectedItemId.toInt()].id
         val userId = auth.currentUser!!.uid
 
         return Offer(
