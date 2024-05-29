@@ -6,27 +6,46 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import br.com.marketdeal.R
+import br.com.marketdeal.dto.MarketSpinnerDTO
+import br.com.marketdeal.dto.ProductSpinnerDTO
+import br.com.marketdeal.model.Offer
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.util.UUID
 
 class OfferFragment : Fragment() {
     private val database by lazy { Firebase.database.reference }
+    private val auth by lazy { Firebase.auth }
+
+    private lateinit var size: EditText
+    private lateinit var originalPrice: EditText
+    private lateinit var currentPrice: EditText
+    private lateinit var observations: EditText
+    private lateinit var submitBtn: Button
+
+    private lateinit var productSpinner: Spinner
+    private lateinit var productAutoCompleteAdapter: ArrayAdapter<String>
+    private val productList = ArrayList<ProductSpinnerDTO>()
     private val productListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
-            //Basically, this says "For each DataSnapshot *Data* in dataSnapshot, do what's inside the method.
             for (suggestionSnapshot in dataSnapshot.getChildren()) {
-                //Get the suggestion by childing the key of the string you want to get.
-                val suggestion = suggestionSnapshot.child("name").getValue(
-                    String::class.java
+                val name = suggestionSnapshot.child("name").getValue(String::class.java)
+                val dto = ProductSpinnerDTO(
+                    suggestionSnapshot.key.toString(),
+                    name!!
                 )
-                //Add the retrieved string to the list
-                productsAutoCompleteAdapter?.add(suggestion)
+
+                productList.add(dto)
+                productAutoCompleteAdapter.add(name)
             }
         }
 
@@ -34,16 +53,21 @@ class OfferFragment : Fragment() {
             Log.w("firebase", "loadProducts:onCancelled", databaseError.toException())
         }
     }
+
+    private lateinit var marketSpinner: Spinner
+    private lateinit var marketAutoCompleteAdapter: ArrayAdapter<String>
+    private val marketList = ArrayList<MarketSpinnerDTO>()
     private val marketListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
-            //Basically, this says "For each DataSnapshot *Data* in dataSnapshot, do what's inside the method.
             for (suggestionSnapshot in dataSnapshot.getChildren()) {
-                //Get the suggestion by childing the key of the string you want to get.
-                val suggestion = suggestionSnapshot.child("name").getValue(
-                    String::class.java
+                val name = suggestionSnapshot.child("name").getValue(String::class.java)
+                val dto = MarketSpinnerDTO(
+                    suggestionSnapshot.key.toString(),
+                    name!!
                 )
-                //Add the retrieved string to the list
-                marketsAutoCompleteAdapter?.add(suggestion)
+
+                marketList.add(dto)
+                marketAutoCompleteAdapter.add(name)
             }
         }
 
@@ -51,11 +75,6 @@ class OfferFragment : Fragment() {
             Log.w("firebase", "loadProducts:onCancelled", databaseError.toException())
         }
     }
-
-    private lateinit var productField: Spinner
-    private lateinit var productsAutoCompleteAdapter: ArrayAdapter<String>
-    private lateinit var marketField: Spinner
-    private lateinit var marketsAutoCompleteAdapter: ArrayAdapter<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,6 +83,8 @@ class OfferFragment : Fragment() {
     ): View? {
         val view = inflater!!.inflate(R.layout.activity_offer, container, false)
 
+        initializeFields(view)
+        configSubmitBtn()
         configProductAutoComplete(view)
         configMarketAutoComplete(view)
         database.child("products").addValueEventListener(productListener)
@@ -72,23 +93,59 @@ class OfferFragment : Fragment() {
         return view
     }
 
+    private fun initializeFields(view: View) {
+        size = view.findViewById(R.id.activity_offer_size)
+        originalPrice = view.findViewById(R.id.activity_offer_original_price)
+        currentPrice = view.findViewById(R.id.activity_offer_current_price)
+        observations = view.findViewById(R.id.activity_offer_observations)
+        submitBtn = view.findViewById(R.id.activity_offer_submit_btn)
+    }
+
+    private fun configSubmitBtn() {
+        submitBtn.setOnClickListener {
+            val offer = createOffer()
+            Log.i(offer.marketId, "configSubmitBtn: ")
+        }
+    }
+
+    private fun createOffer(): Offer {
+        val sizeStr = size.text.toString()
+        val originalPriceValue = originalPrice.text.toString().toBigDecimal()
+        val currentPriceValue = currentPrice.text.toString().toBigDecimal()
+        val observationsStr = observations.text.toString()
+        val marketId = marketList[marketSpinner.selectedItemId.toInt()].id
+        val productId = productList[marketSpinner.selectedItemId.toInt()].id
+        val userId = auth.currentUser!!.uid
+
+        return Offer(
+            UUID.randomUUID(),
+            sizeStr,
+            originalPriceValue,
+            currentPriceValue,
+            observationsStr,
+            marketId,
+            productId,
+            userId
+        )
+    }
+
     private fun configProductAutoComplete(view: View) {
-        productsAutoCompleteAdapter = ArrayAdapter(
+        productAutoCompleteAdapter = ArrayAdapter(
             view.context,
             android.R.layout.simple_list_item_1
         )
-        productField = view.findViewById(R.id.activity_offer_product)
-        productField.adapter = productsAutoCompleteAdapter
+
+        productSpinner = view.findViewById(R.id.activity_offer_product)
+        productSpinner.adapter = productAutoCompleteAdapter
     }
 
     private fun configMarketAutoComplete(view: View) {
-        marketsAutoCompleteAdapter = ArrayAdapter(
+        marketAutoCompleteAdapter = ArrayAdapter(
             view.context,
             android.R.layout.simple_list_item_1
         )
-        marketField = view.findViewById(R.id.activity_offer_market)
-        marketField.adapter = marketsAutoCompleteAdapter
+        marketSpinner = view.findViewById(R.id.activity_offer_market)
+        marketSpinner.adapter = marketAutoCompleteAdapter
     }
-
 
 }
