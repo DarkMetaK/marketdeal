@@ -1,8 +1,6 @@
 package br.com.marketdeal.ui.activity
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -18,13 +16,10 @@ class SignInActivity : AppCompatActivity() {
     private val password by lazy { findViewById<TextView>(R.id.activity_sign_in_password) }
     private val loginBtn by lazy { findViewById<Button>(R.id.activity_sign_in_login_btn) }
     private val signUpBtn by lazy { findViewById<TextView>(R.id.activity_sign_in_redirect_link) }
-    private lateinit var sp: SharedPreferences
     private val auth by lazy { Firebase.auth }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //previousSignIn()
         super.onCreate(savedInstanceState)
-        sp = getSharedPreferences("MarketDeal_crud", MODE_PRIVATE)
 
         supportActionBar?.hide()
         setContentView(R.layout.activity_sign_in)
@@ -51,7 +46,6 @@ class SignInActivity : AppCompatActivity() {
         val passwordStr = password.text.toString()
 
         if (emailStr.isNullOrBlank() || passwordStr.isNullOrBlank()) {
-            // Mostrar erros
             Toast.makeText(
                 baseContext,
                 "Preencha todos os campos",
@@ -64,14 +58,6 @@ class SignInActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(emailStr, passwordStr)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    sp.edit().apply{
-                        putString("email",emailStr)
-                        commit()
-                    }
-                    sp.edit().apply{
-                        putString("password",passwordStr)
-                        commit()
-                    }
                     val intent = Intent(this, MainActivity::class.java)
                     finish()
                     startActivity(intent)
@@ -84,20 +70,5 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
     }
-    /*
-    private fun previousSignIn(){
-        val sp = this.getSharedPreferences("MarketDeal_crud", MODE_PRIVATE)
-        val emailStr = sp.getString("email","[]").toString()
-        val passwordStr = sp.getString("password","[]").toString()
-
-        auth.signInWithEmailAndPassword(emailStr, passwordStr)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    finish()
-                    startActivity(intent)
-                }
-            }
-    }*/
 
 }
