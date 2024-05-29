@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.marketdeal.R
 import br.com.marketdeal.dto.MarketSpinnerDTO
@@ -104,21 +105,35 @@ class OfferFragment : Fragment() {
     private fun configSubmitBtn() {
         submitBtn.setOnClickListener {
             val offer = createOffer()
-            Log.i(offer.marketId, "configSubmitBtn: ")
+            database.child("offers").child(offer.id).setValue(offer)
+                .addOnSuccessListener {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Oferta criada com sucesso!",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Falha ao criar oferta, por favor tente novamente!",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
         }
     }
 
     private fun createOffer(): Offer {
         val sizeStr = size.text.toString()
-        val originalPriceValue = originalPrice.text.toString().toBigDecimal()
-        val currentPriceValue = currentPrice.text.toString().toBigDecimal()
+        val originalPriceValue = originalPrice.text.toString().toDouble()
+        val currentPriceValue = currentPrice.text.toString().toDouble()
         val observationsStr = observations.text.toString()
         val marketId = marketList[marketSpinner.selectedItemId.toInt()].id
         val productId = productList[marketSpinner.selectedItemId.toInt()].id
         val userId = auth.currentUser!!.uid
 
         return Offer(
-            UUID.randomUUID(),
+            UUID.randomUUID().toString(),
             sizeStr,
             originalPriceValue,
             currentPriceValue,
