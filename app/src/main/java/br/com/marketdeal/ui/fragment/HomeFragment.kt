@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater!!.inflate(R.layout.activity_home, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_home, container, false)
 
         initializeAndConfigList(view)
         database.child("offers").addValueEventListener(offerListener)
@@ -56,7 +56,7 @@ class HomeFragment : Fragment() {
 
     private fun initializeAndConfigList(view: View) {
         offerAdapter = OfferAdapter(view.context)
-        offerList = view.findViewById(R.id.activity_home_offers_list)
+        offerList = view.findViewById(R.id.fragment_home_offers_list)
 
         offerList.adapter = offerAdapter
     }

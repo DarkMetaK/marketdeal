@@ -83,7 +83,7 @@ class OfferFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater!!.inflate(R.layout.activity_offer, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_offer, container, false)
 
         initializeFields(view)
         configSubmitBtn()
@@ -96,11 +96,11 @@ class OfferFragment : Fragment() {
     }
 
     private fun initializeFields(view: View) {
-        size = view.findViewById(R.id.activity_offer_size)
-        originalPrice = view.findViewById(R.id.activity_offer_original_price)
-        currentPrice = view.findViewById(R.id.activity_offer_current_price)
-        observations = view.findViewById(R.id.activity_offer_observations)
-        submitBtn = view.findViewById(R.id.activity_offer_submit_btn)
+        size = view.findViewById(R.id.fragment_offer_size)
+        originalPrice = view.findViewById(R.id.fragment_offer_original_price)
+        currentPrice = view.findViewById(R.id.fragment_offer_current_price)
+        observations = view.findViewById(R.id.fragment_offer_observations)
+        submitBtn = view.findViewById(R.id.fragment_offer_submit_btn)
     }
 
     private fun configSubmitBtn() {
@@ -177,7 +177,7 @@ class OfferFragment : Fragment() {
             android.R.layout.simple_list_item_1
         )
 
-        productSpinner = view.findViewById(R.id.activity_offer_product)
+        productSpinner = view.findViewById(R.id.fragment_offer_product)
         productSpinner.adapter = productAutoCompleteAdapter
     }
 
@@ -186,7 +186,7 @@ class OfferFragment : Fragment() {
             view.context,
             android.R.layout.simple_list_item_1
         )
-        marketSpinner = view.findViewById(R.id.activity_offer_market)
+        marketSpinner = view.findViewById(R.id.fragment_offer_market)
         marketSpinner.adapter = marketAutoCompleteAdapter
     }
 

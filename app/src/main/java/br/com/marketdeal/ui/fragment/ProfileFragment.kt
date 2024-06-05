@@ -54,7 +54,7 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater!!.inflate(R.layout.activity_profile, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_profile, container, false)
 
         initializeFields(view)
         configLogoutBtn()
@@ -69,13 +69,13 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initializeFields(view: View) {
-        name = view.findViewById(R.id.activity_profile_name)
-        phone = view.findViewById(R.id.activity_profile_phone)
-        email = view.findViewById(R.id.activity_profile_email)
-        password = view.findViewById(R.id.activity_profile_password)
-        logoutBtn = view.findViewById(R.id.activity_profile_logout_btn)
-        updateBtn = view.findViewById(R.id.activity_profile_update_btn)
-        deleteBtn = view.findViewById(R.id.activity_profile_delete_btn)
+        name = view.findViewById(R.id.fragment_profile_name)
+        phone = view.findViewById(R.id.fragment_profile_phone)
+        email = view.findViewById(R.id.fragment_profile_email)
+        password = view.findViewById(R.id.fragment_profile_password)
+        logoutBtn = view.findViewById(R.id.fragment_profile_logout_btn)
+        updateBtn = view.findViewById(R.id.fragment_profile_update_btn)
+        deleteBtn = view.findViewById(R.id.fragment_profile_delete_btn)
     }
 
     private fun configLogoutBtn() {

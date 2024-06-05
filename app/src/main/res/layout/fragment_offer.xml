@@ -59,7 +59,7 @@
                 android:orientation="vertical">
 
                 <Spinner
-                    android:id="@+id/activity_offer_market"
+                    android:id="@+id/fragment_offer_market"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -69,7 +69,7 @@
                     android:textSize="16sp" />
 
                 <Spinner
-                    android:id="@+id/activity_offer_product"
+                    android:id="@+id/fragment_offer_product"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -79,7 +79,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/activity_offer_size"
+                    android:id="@+id/fragment_offer_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -93,7 +93,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/activity_offer_original_price"
+                    android:id="@+id/fragment_offer_original_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -107,7 +107,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/activity_offer_current_price"
+                    android:id="@+id/fragment_offer_current_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -121,7 +121,7 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/activity_offer_observations"
+                    android:id="@+id/fragment_offer_observations"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -136,7 +136,7 @@
                     android:textSize="16sp" />
 
                 <Button
-                    android:id="@+id/activity_offer_submit_btn"
+                    android:id="@+id/fragment_offer_submit_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
