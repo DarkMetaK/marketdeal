@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
 import java.util.UUID
 
 class OfferFragment : Fragment() {
@@ -152,6 +153,7 @@ class OfferFragment : Fragment() {
             originalPriceStr.toDouble(),
             currentPriceStr.toDouble(),
             observationsStr,
+            LocalDate.now().toString(),
             marketId,
             productId,
             userId
