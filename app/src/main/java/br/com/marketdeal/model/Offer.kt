@@ -11,7 +11,9 @@ data class Offer(
     val observations: String = "",
     val createdAt: String = LocalDate.now().toString(),
     val marketId: String = "",
+    val marketName: String = "",
     val productId: String = "",
+    val productName: String = "",
     val userId: String = "",
 ) {
 
@@ -25,7 +27,9 @@ data class Offer(
             "observations" to observations,
             "createdAt" to createdAt,
             "marketId" to marketId,
+            "marketName" to marketName,
             "productId" to productId,
+            "productName" to productName,
             "userId" to userId,
         )
     }

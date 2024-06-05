@@ -33,6 +33,7 @@
     <ListView
         android:id="@+id/activity_home_offers_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="20dp" />
 
 </LinearLayout>

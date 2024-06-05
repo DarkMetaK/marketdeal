@@ -134,7 +134,9 @@ class OfferFragment : Fragment() {
         val currentPriceStr = currentPrice.text.toString()
         val observationsStr = observations.text.toString()
         val marketId = marketList[marketSpinner.selectedItemId.toInt()].id
+        val marketName = marketList[marketSpinner.selectedItemId.toInt()].name
         val productId = productList[productSpinner.selectedItemId.toInt()].id
+        val productName = productList[productSpinner.selectedItemId.toInt()].name
         val userId = auth.currentUser!!.uid
 
         if (sizeStr.isEmpty() || originalPriceStr.isEmpty() || currentPriceStr.isEmpty() || marketId.isEmpty() || productId.isEmpty()) {
@@ -155,7 +157,9 @@ class OfferFragment : Fragment() {
             observationsStr,
             LocalDate.now().toString(),
             marketId,
+            marketName,
             productId,
+            productName,
             userId
         )
     }
