@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.time.LocalDate
 import java.util.UUID
 
 class OfferFragment : Fragment() {
@@ -82,7 +83,7 @@ class OfferFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater!!.inflate(R.layout.activity_offer, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_offer, container, false)
 
         initializeFields(view)
         configSubmitBtn()
@@ -95,11 +96,11 @@ class OfferFragment : Fragment() {
     }
 
     private fun initializeFields(view: View) {
-        size = view.findViewById(R.id.activity_offer_size)
-        originalPrice = view.findViewById(R.id.activity_offer_original_price)
-        currentPrice = view.findViewById(R.id.activity_offer_current_price)
-        observations = view.findViewById(R.id.activity_offer_observations)
-        submitBtn = view.findViewById(R.id.activity_offer_submit_btn)
+        size = view.findViewById(R.id.fragment_offer_size)
+        originalPrice = view.findViewById(R.id.fragment_offer_original_price)
+        currentPrice = view.findViewById(R.id.fragment_offer_current_price)
+        observations = view.findViewById(R.id.fragment_offer_observations)
+        submitBtn = view.findViewById(R.id.fragment_offer_submit_btn)
     }
 
     private fun configSubmitBtn() {
@@ -133,7 +134,9 @@ class OfferFragment : Fragment() {
         val currentPriceStr = currentPrice.text.toString()
         val observationsStr = observations.text.toString()
         val marketId = marketList[marketSpinner.selectedItemId.toInt()].id
+        val marketName = marketList[marketSpinner.selectedItemId.toInt()].name
         val productId = productList[productSpinner.selectedItemId.toInt()].id
+        val productName = productList[productSpinner.selectedItemId.toInt()].name
         val userId = auth.currentUser!!.uid
 
         if (sizeStr.isEmpty() || originalPriceStr.isEmpty() || currentPriceStr.isEmpty() || marketId.isEmpty() || productId.isEmpty()) {
@@ -152,8 +155,11 @@ class OfferFragment : Fragment() {
             originalPriceStr.toDouble(),
             currentPriceStr.toDouble(),
             observationsStr,
+            LocalDate.now().toString(),
             marketId,
+            marketName,
             productId,
+            productName,
             userId
         )
     }
@@ -171,7 +177,7 @@ class OfferFragment : Fragment() {
             android.R.layout.simple_list_item_1
         )
 
-        productSpinner = view.findViewById(R.id.activity_offer_product)
+        productSpinner = view.findViewById(R.id.fragment_offer_product)
         productSpinner.adapter = productAutoCompleteAdapter
     }
 
@@ -180,7 +186,7 @@ class OfferFragment : Fragment() {
             view.context,
             android.R.layout.simple_list_item_1
         )
-        marketSpinner = view.findViewById(R.id.activity_offer_market)
+        marketSpinner = view.findViewById(R.id.fragment_offer_market)
         marketSpinner.adapter = marketAutoCompleteAdapter
     }
 
