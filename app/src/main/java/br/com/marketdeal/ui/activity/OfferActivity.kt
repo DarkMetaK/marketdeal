@@ -17,6 +17,7 @@ class OfferActivity : AppCompatActivity() {
     private val size by lazy { findViewById<TextView>(R.id.activity_offer_size) }
     private val originalPrice by lazy { findViewById<TextView>(R.id.activity_offer_original_price) }
     private val currentPrice by lazy { findViewById<TextView>(R.id.activity_offer_current_price) }
+    private val observations by lazy { findViewById<TextView>(R.id.activity_offer_observations) }
 
     private lateinit var offer: Offer
 
@@ -40,7 +41,7 @@ class OfferActivity : AppCompatActivity() {
 
                 if (foundOffer != null) {
                     offer = foundOffer
-                    title.text = offer.productName
+                    initializeFields()
                 }
             }.addOnFailureListener {
                 Log.e("firebase", "Error getting data", it)
@@ -48,6 +49,15 @@ class OfferActivity : AppCompatActivity() {
         } else {
             finish()
         }
+    }
+
+    private fun initializeFields() {
+        title.text = offer.productName
+        date.text = offer.createdAt
+        size.text = offer.size
+        originalPrice.text = offer.originalPrice.toString()
+        currentPrice.text = offer.currentPrice.toString()
+        observations.text = offer.observations
     }
 
 }
