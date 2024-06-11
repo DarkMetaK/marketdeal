@@ -1,10 +1,12 @@
 package br.com.marketdeal.model
 
+import android.location.Address
 import com.google.firebase.database.Exclude
 
 data class Market(
-    val id: Long = 0L,
-    val name: String = ""
+    val id: String = "",
+    val name: String = "",
+    val  address : String=""
 ) {
 
     @Exclude

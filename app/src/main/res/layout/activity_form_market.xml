@@ -66,7 +66,7 @@
                 >
 
                 <EditText
-                    android:id="@+id/fragment_profile_name"
+                    android:id="@+id/market_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -80,13 +80,13 @@
                     android:textSize="16sp" />
 
                 <EditText
-                    android:id="@+id/fragment_profile_phone"
+                    android:id="@+id/address_market"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
                     android:hint="Endereço"
-                    android:inputType="phone"
+                    android:inputType="text"
                     android:lineHeight="24sp"
                     android:minHeight="48dp"
                     android:padding="12dp"
@@ -94,13 +94,8 @@
                     android:textSize="16sp" />
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="269dp"
-                    android:orientation="vertical"></LinearLayout>
-
                 <Button
-                    android:id="@+id/fragment_profile_update_btn"
+                    android:id="@+id/market_register_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
