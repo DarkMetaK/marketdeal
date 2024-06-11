@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import br.com.marketdeal.R
 import br.com.marketdeal.model.Offer
+import br.com.marketdeal.model.Market
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -18,6 +19,9 @@ class OfferActivity : AppCompatActivity() {
     private val originalPrice by lazy { findViewById<TextView>(R.id.activity_offer_original_price) }
     private val currentPrice by lazy { findViewById<TextView>(R.id.activity_offer_current_price) }
     private val observations by lazy { findViewById<TextView>(R.id.activity_offer_observations) }
+
+    private val marketName by lazy { findViewById<TextView>(R.id.activity_offer_market_name) }
+    private val marketAddress by lazy { findViewById<TextView>(R.id.activity_offer_market_address) }
 
     private lateinit var offer: Offer
 
@@ -42,12 +46,26 @@ class OfferActivity : AppCompatActivity() {
                 if (foundOffer != null) {
                     offer = foundOffer
                     initializeFields()
+                    retrieveMarketData()
                 }
             }.addOnFailureListener {
-                Log.e("firebase", "Error getting data", it)
+                Log.e("firebase", "Error getting offer data", it)
             }
         } else {
             finish()
+        }
+    }
+
+    private fun retrieveMarketData() {
+        database.child("markets").child(offer.marketId).get().addOnSuccessListener {
+            val market = it.getValue(Market::class.java)
+
+            if (foundMarket != null) {
+                marketName.text = market.name
+                marketAddress.text = market.address
+            }
+        }.addOnFailureListener {
+            Log.e("firebase", "Error getting market data", it)
         }
     }
 
