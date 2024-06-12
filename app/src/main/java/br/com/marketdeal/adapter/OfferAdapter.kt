@@ -1,7 +1,6 @@
 package br.com.marketdeal.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,10 +30,6 @@ class OfferAdapter(private val context: Context) : BaseAdapter() {
             .inflate(R.layout.offer_item, viewGroup, false)
 
         val offer = offers[position]
-
-        Log.i(offer.createdAt, "offer-date")
-        Log.i(offer.size, "offer-size")
-        Log.i(offer.originalPrice.toString(), "offer-originalPrice")
 
         val title = createdView.findViewById<TextView>(R.id.offer_item_title)
         val date = createdView.findViewById<TextView>(R.id.offer_item_date)

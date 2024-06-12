@@ -1,21 +1,24 @@
 package br.com.marketdeal.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
+import android.view.View
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.marketdeal.R
-import br.com.marketdeal.model.Offer
 import br.com.marketdeal.model.Market
+import br.com.marketdeal.model.Offer
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.auth.ktx.auth
 
 class OfferActivity : AppCompatActivity() {
     private val database by lazy { Firebase.database.reference }
     private val userId by lazy { Firebase.auth.currentUser?.uid ?: null }
-    
+
     private val title by lazy { findViewById<TextView>(R.id.activity_offer_title) }
     private val date by lazy { findViewById<TextView>(R.id.activity_offer_date) }
     private val size by lazy { findViewById<TextView>(R.id.activity_offer_size) }
@@ -27,6 +30,7 @@ class OfferActivity : AppCompatActivity() {
     private val marketAddress by lazy { findViewById<TextView>(R.id.activity_offer_market_address) }
 
     private val deleteBtn by lazy { findViewById<Button>(R.id.activity_offer_delete_btn) }
+    private val editBtn by lazy { findViewById<Button>(R.id.activity_offer_edit_btn) }
 
     private lateinit var offer: Offer
 
@@ -37,12 +41,9 @@ class OfferActivity : AppCompatActivity() {
         setContentView(R.layout.activity_offer)
 
         retrieveIdAndFetchOfferData()
-        configDeleteButton()
     }
 
     private fun retrieveIdAndFetchOfferData() {
-        val intent = intent
-
         if (intent.hasExtra("id")) {
             val id = intent.getSerializableExtra("id") as String
 
@@ -51,7 +52,10 @@ class OfferActivity : AppCompatActivity() {
 
                 if (foundOffer != null) {
                     offer = foundOffer
+
                     initializeFields()
+                    configDeleteButton()
+                    configEditButton()
                     retrieveMarketData()
                 }
             }.addOnFailureListener {
@@ -66,7 +70,7 @@ class OfferActivity : AppCompatActivity() {
         database.child("markets").child(offer.marketId).get().addOnSuccessListener {
             val market = it.getValue(Market::class.java)
 
-            if (foundMarket != null) {
+            if (market != null) {
                 marketName.text = market.name
                 marketAddress.text = market.address
             }
@@ -84,10 +88,10 @@ class OfferActivity : AppCompatActivity() {
         observations.text = offer.observations
     }
 
-     private fun deleteOffer() {
+    private fun deleteOffer() {
         database.child("offers").child(offer.id).removeValue()
         Toast.makeText(
-            baseContext,
+            this,
             "Oferta deletada com sucesso!",
             Toast.LENGTH_SHORT,
         ).show()
@@ -95,19 +99,27 @@ class OfferActivity : AppCompatActivity() {
         finish()
     }
 
-     private fun configDeleteButton() {
-         deleteBtn.setOnClickListener {
-            if(userId != null && offer.userId.equals(userId)) {
+    private fun configDeleteButton() {
+        if (userId != null && offer.userId == userId) {
+            deleteBtn.setOnClickListener {
                 deleteOffer()
             }
-            else {
-                Toast.makeText(
-                    baseContext,
-                    "Você não possui permissão para deletar esta oferta!",
-                    Toast.LENGTH_SHORT,
-                ).show()
-            }
+        } else {
+            deleteBtn.visibility = View.GONE
         }
-     }
+    }
+
+    private fun configEditButton() {
+        if (userId != null && offer.userId == userId) {
+            editBtn.setOnClickListener {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("fragmentToLoad", "offer")
+
+                startActivity(intent)
+            }
+        } else {
+            editBtn.visibility = View.GONE
+        }
+    }
 
 }

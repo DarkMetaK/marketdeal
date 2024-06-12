@@ -1,6 +1,7 @@
 package br.com.marketdeal.model
 
 import com.google.firebase.database.Exclude
+import java.io.Serializable
 import java.time.LocalDate
 
 data class Offer(
@@ -15,7 +16,7 @@ data class Offer(
     val productId: String = "",
     val productName: String = "",
     val userId: String = "",
-) {
+) : Serializable {
 
     @Exclude
     fun toMap(): Map<String, Any?> {
