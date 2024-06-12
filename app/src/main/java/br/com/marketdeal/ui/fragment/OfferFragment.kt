@@ -78,6 +78,9 @@ class OfferFragment : Fragment() {
         }
     }
 
+    private lateinit var offer: Offer
+    private var offerIsBeingEdited = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -106,16 +109,16 @@ class OfferFragment : Fragment() {
     }
 
     private fun verifyIfOfferIsBeingEdited() {
-        val offer = activity?.intent?.extras?.getSerializable("offer") as Offer?
+        val intentOffer = activity?.intent?.extras?.getSerializable("offer") as Offer?
 
-        if (offer != null) {
-            size.setText(offer.size)
-            originalPrice.setText(offer.originalPrice.toString())
-            currentPrice.setText(offer.currentPrice.toString())
-            observations.setText(offer.observations)
+        if (intentOffer != null) {
+            size.setText(intentOffer.size)
+            originalPrice.setText(intentOffer.originalPrice.toString())
+            currentPrice.setText(intentOffer.currentPrice.toString())
+            observations.setText(intentOffer.observations)
 
-            var market = marketList.find { dto -> dto.id == offer.marketId }
-            var product = productList.find { dto -> dto.id === offer.productId }
+            var market = marketList.find { dto -> dto.id == intentOffer.marketId }
+            var product = productList.find { dto -> dto.id === intentOffer.productId }
 
             if (market != null) {
                 var marketIndex = marketList.indexOf(market)
@@ -126,35 +129,68 @@ class OfferFragment : Fragment() {
                 var productIndex = productList.indexOf(product)
                 productSpinner.setSelection(productIndex)
             }
+
+            submitBtn.text = "Editar Oferta"
+            offer = intentOffer
+            offerIsBeingEdited = true
         }
     }
 
     private fun configSubmitBtn() {
         submitBtn.setOnClickListener {
-            val offer = createOffer()
+            createOffer()
 
             if (offer != null) {
-                database.child("offers").child(offer.id).setValue(offer)
-                    .addOnSuccessListener {
-                        Toast.makeText(
-                            requireActivity(),
-                            "Oferta anunciada com sucesso!",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        cleanFields()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            requireActivity(),
-                            "Falha ao anunciar oferta, por favor tente novamente!",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
+                if (offerIsBeingEdited) {
+                    updateOffer()
+                } else {
+                    database.child("offers").child(offer.id).setValue(offer)
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                requireActivity(),
+                                "Oferta anunciada com sucesso!",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                            cleanFields()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(
+                                requireActivity(),
+                                "Falha ao anunciar oferta, por favor tente novamente!",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                }
             }
         }
     }
 
-    private fun createOffer(): Offer? {
+    private fun updateOffer() {
+        val offerValues = offer.toMap()
+
+        val childUpdates = hashMapOf<String, Any>(
+            "/${offer.id}" to offerValues,
+        )
+
+        database.child("users").updateChildren(childUpdates)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Oferta atualizada com sucesso!",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Falha ao atualizar os dados, por favor tente novamente.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+    }
+
+    private fun createOffer() {
         val sizeStr = size.text.toString()
         val originalPriceStr = originalPrice.text.toString()
         val currentPriceStr = currentPrice.text.toString()
@@ -172,10 +208,10 @@ class OfferFragment : Fragment() {
                 Toast.LENGTH_SHORT,
             ).show()
 
-            return null
+            return
         }
 
-        return Offer(
+        offer = Offer(
             UUID.randomUUID().toString(),
             sizeStr,
             originalPriceStr.toDouble(),
