@@ -27,11 +27,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadFragment() {
         val intentFragment = intent?.extras?.getString("fragmentToLoad")
-        when (intentFragment) {
-            "offer" -> {
-                navController.navigate(R.id.mi_offer)
+
+        if (intentFragment != null) {
+            when (intentFragment) {
+                "offer" -> {
+                    // TODO: Fazer possível retornar para home
+                    navController.navigate(R.id.mi_offer)
+                    intent.removeExtra("fragmentToLoad")
+                }
+
+                else -> {
+                    navController.navigate(R.id.mi_home)
+                }
             }
         }
+
     }
 
 }

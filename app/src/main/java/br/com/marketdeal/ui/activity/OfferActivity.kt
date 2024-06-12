@@ -114,6 +114,7 @@ class OfferActivity : AppCompatActivity() {
             editBtn.setOnClickListener {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("fragmentToLoad", "offer")
+                intent.putExtra("offer", offer)
 
                 startActivity(intent)
             }

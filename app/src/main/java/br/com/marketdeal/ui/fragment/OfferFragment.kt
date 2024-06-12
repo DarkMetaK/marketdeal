@@ -86,6 +86,8 @@ class OfferFragment : Fragment() {
         val view = inflater!!.inflate(R.layout.fragment_offer, container, false)
 
         initializeFields(view)
+        verifyIfOfferIsBeingEdited()
+
         configSubmitBtn()
         configProductAutoComplete(view)
         configMarketAutoComplete(view)
@@ -101,6 +103,30 @@ class OfferFragment : Fragment() {
         currentPrice = view.findViewById(R.id.fragment_offer_current_price)
         observations = view.findViewById(R.id.fragment_offer_observations)
         submitBtn = view.findViewById(R.id.fragment_offer_submit_btn)
+    }
+
+    private fun verifyIfOfferIsBeingEdited() {
+        val offer = activity?.intent?.extras?.getSerializable("offer") as Offer?
+
+        if (offer != null) {
+            size.setText(offer.size)
+            originalPrice.setText(offer.originalPrice.toString())
+            currentPrice.setText(offer.currentPrice.toString())
+            observations.setText(offer.observations)
+
+            var market = marketList.find { dto -> dto.id == offer.marketId }
+            var product = productList.find { dto -> dto.id === offer.productId }
+
+            if (market != null) {
+                var marketIndex = marketList.indexOf(market)
+                marketSpinner.setSelection(marketIndex)
+            }
+
+            if (product != null) {
+                var productIndex = productList.indexOf(product)
+                productSpinner.setSelection(productIndex)
+            }
+        }
     }
 
     private fun configSubmitBtn() {
@@ -164,13 +190,6 @@ class OfferFragment : Fragment() {
         )
     }
 
-    private fun cleanFields() {
-        size.setText("")
-        originalPrice.setText("")
-        currentPrice.setText("")
-        observations.setText("")
-    }
-
     private fun configProductAutoComplete(view: View) {
         productAutoCompleteAdapter = ArrayAdapter(
             view.context,
@@ -188,6 +207,13 @@ class OfferFragment : Fragment() {
         )
         marketSpinner = view.findViewById(R.id.fragment_offer_market)
         marketSpinner.adapter = marketAutoCompleteAdapter
+    }
+
+    private fun cleanFields() {
+        size.setText("")
+        originalPrice.setText("")
+        currentPrice.setText("")
+        observations.setText("")
     }
 
 }
