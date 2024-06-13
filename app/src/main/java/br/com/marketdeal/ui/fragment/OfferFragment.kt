@@ -138,41 +138,45 @@ class OfferFragment : Fragment() {
 
     private fun configSubmitBtn() {
         submitBtn.setOnClickListener {
-            createOffer()
+            createOfferModel()
 
             if (offer != null) {
                 if (offerIsBeingEdited) {
                     updateOffer()
                 } else {
-                    database.child("offers").child(offer.id).setValue(offer)
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                requireActivity(),
-                                "Oferta anunciada com sucesso!",
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                            cleanFields()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(
-                                requireActivity(),
-                                "Falha ao anunciar oferta, por favor tente novamente!",
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                        }
+                    addNewOffer()
                 }
             }
         }
+    }
+
+    private fun addNewOffer() {
+        database.child("offers").child(offer.uid).setValue(offer)
+            .addOnSuccessListener {
+                Toast.makeText(
+                    requireActivity(),
+                    "Oferta anunciada com sucesso!",
+                    Toast.LENGTH_SHORT,
+                ).show()
+                cleanFields()
+            }
+            .addOnFailureListener {
+                Toast.makeText(
+                    requireActivity(),
+                    "Falha ao anunciar oferta, por favor tente novamente!",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
     }
 
     private fun updateOffer() {
         val offerValues = offer.toMap()
 
         val childUpdates = hashMapOf<String, Any>(
-            "/${offer.id}" to offerValues,
+            "/${offer.uid}" to offerValues,
         )
 
-        database.child("users").updateChildren(childUpdates)
+        database.child("offers").updateChildren(childUpdates)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(
@@ -190,7 +194,8 @@ class OfferFragment : Fragment() {
             }
     }
 
-    private fun createOffer() {
+    private fun createOfferModel() {
+        var offerId = UUID.randomUUID().toString()
         val sizeStr = size.text.toString()
         val originalPriceStr = originalPrice.text.toString()
         val currentPriceStr = currentPrice.text.toString()
@@ -211,8 +216,12 @@ class OfferFragment : Fragment() {
             return
         }
 
+        if (offerIsBeingEdited) {
+            offerId = offer.uid
+        }
+
         offer = Offer(
-            UUID.randomUUID().toString(),
+            offerId,
             sizeStr,
             originalPriceStr.toDouble(),
             currentPriceStr.toDouble(),
