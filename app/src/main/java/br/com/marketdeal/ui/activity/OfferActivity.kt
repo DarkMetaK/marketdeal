@@ -89,7 +89,7 @@ class OfferActivity : AppCompatActivity() {
     }
 
     private fun deleteOffer() {
-        database.child("offers").child(offer.id).removeValue()
+        database.child("offers").child(offer.uid).removeValue()
         Toast.makeText(
             this,
             "Oferta deletada com sucesso!",

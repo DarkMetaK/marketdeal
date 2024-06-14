@@ -9,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private val navController by lazy { findNavController(R.id.activity_main_container) }
+    private val navView by lazy { findViewById<BottomNavigationView>(R.id.activity_main_bn_navigation) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,8 +21,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        val navView: BottomNavigationView = findViewById(R.id.activity_main_bn_navigation)
-
         navView.setupWithNavController(navController)
     }
 
@@ -31,13 +30,8 @@ class MainActivity : AppCompatActivity() {
         if (intentFragment != null) {
             when (intentFragment) {
                 "offer" -> {
-                    // TODO: Fazer possível retornar para home
-                    navController.navigate(R.id.mi_offer)
+                    navView.selectedItemId = R.id.mi_offer
                     intent.removeExtra("fragmentToLoad")
-                }
-
-                else -> {
-                    navController.navigate(R.id.mi_home)
                 }
             }
         }

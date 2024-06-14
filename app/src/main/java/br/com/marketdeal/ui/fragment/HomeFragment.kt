@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
         offerList.setOnItemClickListener { adapterView, view, position, id ->
             val offer = adapterView.getItemAtPosition(position) as Offer
             val intent = Intent(view.context, OfferActivity::class.java)
-            intent.putExtra("id", offer.id)
+            intent.putExtra("id", offer.uid)
 
             startActivity(intent)
         }
