@@ -78,14 +78,55 @@
                     android:padding="12dp"
                     android:textColorHint="@color/gray_7"
                     android:textSize="16sp" />
-
                 <EditText
-                    android:id="@+id/address_market"
+                    android:id="@+id/street_market"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
-                    android:hint="Endereço"
+                    android:hint="Rua"
+                    android:inputType="text"
+                    android:lineHeight="24sp"
+                    android:minHeight="48dp"
+                    android:padding="12dp"
+                    android:textColorHint="@color/gray_7"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/number_market"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/custom_input"
+                    android:hint="Número"
+                    android:inputType="number"
+                    android:lineHeight="24sp"
+                    android:minHeight="48dp"
+                    android:padding="12dp"
+                    android:textColorHint="@color/gray_7"
+                    android:textSize="16sp" />
+
+
+                <EditText
+                    android:id="@+id/nbr_market"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/custom_input"
+                    android:hint="Bairro"
+                    android:inputType="text"
+                    android:lineHeight="24sp"
+                    android:minHeight="48dp"
+                    android:padding="12dp"
+                    android:textColorHint="@color/gray_7"
+                    android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/city_market"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/custom_input"
+                    android:hint="Cidade"
                     android:inputType="text"
                     android:lineHeight="24sp"
                     android:minHeight="48dp"
