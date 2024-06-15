@@ -169,12 +169,14 @@ class OfferFragment : Fragment() {
 
     private fun configSubmitBtn() {
         submitBtn.setOnClickListener {
-            createOfferModel()
+            val offerWasCreated = createOfferModel()
 
-            if (offerIsBeingEdited) {
-                updateOffer()
-            } else {
-                addNewOffer()
+            if (offerWasCreated) {
+                if (offerIsBeingEdited) {
+                    updateOffer()
+                } else {
+                    addNewOffer()
+                }
             }
         }
     }
@@ -226,7 +228,7 @@ class OfferFragment : Fragment() {
             }
     }
 
-    private fun createOfferModel() {
+    private fun createOfferModel(): Boolean {
         var offerId = UUID.randomUUID().toString()
         val sizeStr = size.text.toString()
         val originalPriceStr = originalPrice.text.toString()
@@ -241,11 +243,11 @@ class OfferFragment : Fragment() {
         if (sizeStr.isEmpty() || originalPriceStr.isEmpty() || currentPriceStr.isEmpty() || marketId.isEmpty() || productId.isEmpty()) {
             Toast.makeText(
                 requireActivity(),
-                "Preencha todos os campos",
+                "Preencha todos os campos obrigatórios.",
                 Toast.LENGTH_SHORT,
             ).show()
 
-            return
+            return false
         }
 
         if (offerIsBeingEdited) {
@@ -265,6 +267,8 @@ class OfferFragment : Fragment() {
             productName,
             userId
         )
+
+        return true
     }
 
     private fun cleanFields() {

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -24,14 +23,13 @@
                 android:textAlignment="center"
                 android:textColor="@color/primary"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray_2" />
+                android:background="@color/gray_2"/>
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,15 +38,14 @@
             android:layout_marginVertical="40dp"
             android:orientation="vertical">
 
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineHeight="28sp"
-                android:text="Anunciar Oferta"
+                android:text="Adicionar Produto"
                 android:textColor="@color/gray_12"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
 
             <LinearLayout
@@ -58,98 +55,62 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <Spinner
-                    android:id="@+id/fragment_offer_market"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Mercado"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
-
-                <Spinner
-                    android:id="@+id/fragment_offer_product"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Produto*"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
-
                 <EditText
-                    android:id="@+id/fragment_offer_size"
+                    android:id="@+id/activity_product_form_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
-                    android:hint="Tamanho / Peso*"
+                    android:hint="Nome*"
                     android:inputType="text"
                     android:lineHeight="24sp"
                     android:minHeight="48dp"
                     android:padding="12dp"
                     android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <EditText
-                    android:id="@+id/fragment_offer_original_price"
+                    android:id="@+id/activity_product_form_producer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
-                    android:hint="Preço original*"
-                    android:inputType="numberDecimal"
+                    android:hint="Marca*"
+                    android:inputType="text"
                     android:lineHeight="24sp"
                     android:minHeight="48dp"
                     android:padding="12dp"
                     android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <EditText
-                    android:id="@+id/fragment_offer_current_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Preço com desconto*"
-                    android:inputType="numberDecimal"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/fragment_offer_observations"
+                    android:id="@+id/activity_product_form_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
                     android:gravity="top"
-                    android:hint="Observações"
+                    android:hint="Descrição"
                     android:inputType="text|textMultiLine"
                     android:lineHeight="24sp"
                     android:minHeight="96dp"
                     android:padding="12dp"
                     android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
                 <Button
-                    android:id="@+id/fragment_offer_submit_btn"
+                    android:id="@+id/activity_product_form_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
                     android:backgroundTint="@color/primary"
                     android:lineHeight="24sp"
                     android:paddingVertical="12dp"
-                    android:text="Anunciar Oferta"
+                    android:text="Adicionar Produto"
                     android:textAllCaps="false"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
             </LinearLayout>
-
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

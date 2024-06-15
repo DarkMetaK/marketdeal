@@ -3,7 +3,7 @@ package br.com.marketdeal.model
 import com.google.firebase.database.Exclude
 
 data class Product(
-    var id: Long = 0,
+    var uid: String = "",
     var name: String = "",
     var description: String = "",
     var producer: String = "",
@@ -12,7 +12,7 @@ data class Product(
     @Exclude
     fun toMap(): Map<String, Any?> {
         return mapOf(
-            "uid" to id,
+            "uid" to uid,
             "name" to name,
             "description" to description,
             "producer" to producer,
