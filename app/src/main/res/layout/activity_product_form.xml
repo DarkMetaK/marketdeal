@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:fillViewport="true">
 
     <LinearLayout
@@ -59,13 +60,17 @@
                         android:layout_height="160dp"
                         android:layout_marginBottom="8dp">
 
-                    <ImageView
+                    <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/activity_product_form_image"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:adjustViewBounds="true"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/ic_empty_image"/>
+                            android:src="@drawable/ic_empty_image"
+                            android:padding="1dp"
+                            app:shapeAppearanceOverlay="@style/roundedImageView"
+                            app:strokeColor="@color/primary"
+                            app:strokeWidth="1dp"/>
 
                     <ProgressBar
                             android:id="@+id/activity_product_form_spinner"
@@ -89,54 +94,76 @@
                         android:layout_marginBottom="40dp"
                         android:clickable="true"/>
 
-                <EditText
-                        android:id="@+id/activity_product_form_name"
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/activity_product_form_name_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:background="@drawable/custom_input"
                         android:hint="Nome*"
-                        android:inputType="text"
-                        android:lineHeight="24sp"
-                        android:minHeight="48dp"
-                        android:padding="12dp"
-                        android:textColorHint="@color/gray_7"
-                        android:textSize="16sp"/>
+                        android:layout_marginBottom="8dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:errorEnabled="true"
+                        app:errorTextColor="@color/destructive"
+                        app:endIconMode="clear_text"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        >
 
-                <EditText
-                        android:id="@+id/activity_product_form_producer"
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/activity_product_form_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_12"
+                            android:maxLength="64"
+                            android:inputType="textCapWords"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/activity_product_form_producer_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:background="@drawable/custom_input"
                         android:hint="Marca*"
-                        android:inputType="text"
-                        android:lineHeight="24sp"
-                        android:minHeight="48dp"
-                        android:padding="12dp"
-                        android:textColorHint="@color/gray_7"
-                        android:textSize="16sp"/>
+                        android:layout_marginBottom="8dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:errorEnabled="true"
+                        app:errorTextColor="@color/destructive"
+                        app:endIconMode="clear_text"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <EditText
-                        android:id="@+id/activity_product_form_description"
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/activity_product_form_producer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_12"
+                            android:maxLength="64"
+                            android:inputType="textCapWords"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="40dp"
-                        android:background="@drawable/custom_input"
-                        android:gravity="top"
                         android:hint="Descrição"
-                        android:inputType="text|textMultiLine"
-                        android:lineHeight="24sp"
-                        android:minHeight="96dp"
-                        android:padding="12dp"
-                        android:textColorHint="@color/gray_7"
-                        android:textSize="16sp"/>
+                        android:layout_marginBottom="20dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:endIconMode="clear_text"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/activity_product_form_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_12"
+                            android:maxLength="240"
+                            android:inputType="text|textMultiLine"
+                            android:gravity="top"
+                            android:minHeight="96dp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                         android:id="@+id/activity_product_form_btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:backgroundTint="@color/primary"
                         android:lineHeight="24sp"
                         android:paddingVertical="12dp"

@@ -3,8 +3,6 @@ package br.com.marketdeal.ui.activity
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -14,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.marketdeal.R
 import br.com.marketdeal.model.Product
 import br.com.marketdeal.utils.ImageLoader
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -34,11 +35,16 @@ class ProductFormActivity : AppCompatActivity() {
         }
     }
 
-    private val image by lazy { findViewById<ImageView>(R.id.activity_product_form_image) }
+    private val image by lazy { findViewById<ShapeableImageView>(R.id.activity_product_form_image) }
     private val spinner by lazy { findViewById<ProgressBar>(R.id.activity_product_form_spinner) }
-    private val name by lazy { findViewById<EditText>(R.id.activity_product_form_name) }
-    private val producer by lazy { findViewById<EditText>(R.id.activity_product_form_producer) }
-    private val description by lazy { findViewById<EditText>(R.id.activity_product_form_description) }
+
+    private val nameLayout by lazy { findViewById<TextInputLayout>(R.id.activity_product_form_name_layout) }
+    private val name by lazy { findViewById<TextInputEditText>(R.id.activity_product_form_name) }
+
+    private val producerLayout by lazy { findViewById<TextInputLayout>(R.id.activity_product_form_producer_layout) }
+    private val producer by lazy { findViewById<TextInputEditText>(R.id.activity_product_form_producer) }
+
+    private val description by lazy { findViewById<TextInputEditText>(R.id.activity_product_form_description) }
     private val submitBtn by lazy { findViewById<Button>(R.id.activity_product_form_btn) }
     private val imageBtn by lazy { findViewById<TextView>(R.id.activity_product_form_add_image) }
 
@@ -131,6 +137,18 @@ class ProductFormActivity : AppCompatActivity() {
         val producerStr = producer.text.toString()
         val descriptionStr = description.text.toString()
 
+        if (nameStr.isEmpty()) {
+            nameLayout.error = "O nome é obrigatório."
+        } else {
+            nameLayout.error = null
+        }
+
+        if (producerStr.isEmpty()) {
+            producerLayout.error = "A marca é obrigatória."
+        } else {
+            producerLayout.error = null
+        }
+
         if (nameStr.isEmpty() || producerStr.isEmpty()) {
             showToast("Preencha todos os campos obrigatórios.")
             callback(false)
@@ -173,7 +191,7 @@ class ProductFormActivity : AppCompatActivity() {
         imgRef.putFile(imageUrl!!)
             .addOnSuccessListener {
                 imgRef.downloadUrl.addOnSuccessListener { uri ->
-                    imageUrl = uri // Update the imageUrl with the downloaded URL
+                    imageUrl = uri
                     callback(true)
                 }.addOnFailureListener {
                     showToast("Falha ao obter a URL da foto!")
@@ -187,7 +205,7 @@ class ProductFormActivity : AppCompatActivity() {
     }
 
     private fun cleanFields() {
-        image.setImageResource(R.drawable.ic_empty_image) // Replace with your default image resource
+        image.setImageResource(R.drawable.ic_empty_image)
         name.setText("")
         producer.setText("")
         description.setText("")
