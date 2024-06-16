@@ -26,7 +26,7 @@ class HomeFragment : Fragment() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val offerArray = ArrayList<Offer>()
 
-            for (suggestionSnapshot in dataSnapshot.getChildren()) {
+            for (suggestionSnapshot in dataSnapshot.children) {
                 val offer = suggestionSnapshot.getValue(Offer::class.java);
 
                 if (offer != null) {

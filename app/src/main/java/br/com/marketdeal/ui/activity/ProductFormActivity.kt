@@ -1,26 +1,46 @@
 package br.com.marketdeal.ui.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.appcompat.app.AppCompatActivity
 import br.com.marketdeal.R
 import br.com.marketdeal.model.Product
+import br.com.marketdeal.utils.ImageLoader
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.util.*
+import com.google.firebase.storage.ktx.storage
+import java.util.UUID
 
 class ProductFormActivity : AppCompatActivity() {
     private val database by lazy { Firebase.database.reference }
+    private val storageRef by lazy { Firebase.storage.reference }
 
     private lateinit var product: Product
     private var productIsBeingEdited = false
 
+    private var imageUrl: Uri? = null
+    private val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
+        if (uri != null) {
+            image.setImageURI(uri)
+            imageUrl = uri
+        }
+    }
+
+    private val image by lazy { findViewById<ImageView>(R.id.activity_product_form_image) }
+    private val spinner by lazy { findViewById<ProgressBar>(R.id.activity_product_form_spinner) }
     private val name by lazy { findViewById<EditText>(R.id.activity_product_form_name) }
     private val producer by lazy { findViewById<EditText>(R.id.activity_product_form_producer) }
     private val description by lazy { findViewById<EditText>(R.id.activity_product_form_description) }
     private val submitBtn by lazy { findViewById<Button>(R.id.activity_product_form_btn) }
+    private val imageBtn by lazy { findViewById<TextView>(R.id.activity_product_form_add_image) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +48,7 @@ class ProductFormActivity : AppCompatActivity() {
         setContentView(R.layout.activity_product_form)
 
         verifyIfProductIsBeingEdited()
+        configImageBtn()
         configSubmitBtn()
     }
 
@@ -35,6 +56,10 @@ class ProductFormActivity : AppCompatActivity() {
         val intentProduct = intent?.extras?.getSerializable("product") as Product?
 
         if (intentProduct != null) {
+            if (intentProduct.imageUrl != null) {
+                ImageLoader.loadImage(this, intentProduct.imageUrl, image, spinner)
+            }
+
             name.setText(intentProduct.name)
             producer.setText(intentProduct.producer)
             description.setText(intentProduct.description)
@@ -45,15 +70,27 @@ class ProductFormActivity : AppCompatActivity() {
         }
     }
 
+    private fun configImageBtn() {
+        imageBtn.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+        }
+    }
+
     private fun configSubmitBtn() {
         submitBtn.setOnClickListener {
-            val productWasCreated = createProductModel()
+            it.isEnabled = false
+            it.isClickable = false
 
-            if (productWasCreated) {
-                if (productIsBeingEdited) {
-                    //updateOffer()
+            createProductModel { productWasCreated ->
+                if (productWasCreated) {
+                    if (productIsBeingEdited) {
+                        updateProduct()
+                    } else {
+                        addNewProduct()
+                    }
                 } else {
-                    addNewProduct()
+                    it.isEnabled = true
+                    it.isClickable = true
                 }
             }
         }
@@ -62,56 +99,107 @@ class ProductFormActivity : AppCompatActivity() {
     private fun addNewProduct() {
         database.child("products").child(product.uid).setValue(product)
             .addOnSuccessListener {
-                Toast.makeText(
-                    this,
-                    "Produto adicionado com sucesso!",
-                    Toast.LENGTH_SHORT,
-                ).show()
+                showToast("Produto adicionado com sucesso!")
                 cleanFields()
             }
             .addOnFailureListener {
-                Toast.makeText(
-                    this,
-                    "Falha ao adicionar produto, por favor tente novamente!",
-                    Toast.LENGTH_SHORT,
-                ).show()
+                showToast("Falha ao adicionar produto, por favor tente novamente!")
+            }
+            .addOnCompleteListener {
+                enableSubmitButton()
             }
     }
 
-    private fun createProductModel(): Boolean {
+    private fun updateProduct() {
+        database.child("products").child(product.uid).setValue(product)
+            .addOnSuccessListener {
+                showToast("Produto atualizado com sucesso!")
+                intent.removeExtra("product")
+                finish()
+            }
+            .addOnFailureListener {
+                showToast("Falha ao atualizar produto, por favor tente novamente!")
+            }
+            .addOnCompleteListener {
+                enableSubmitButton()
+            }
+    }
+
+    private fun createProductModel(callback: (Boolean) -> Unit) {
         var productId = UUID.randomUUID().toString()
         val nameStr = name.text.toString()
         val producerStr = producer.text.toString()
         val descriptionStr = description.text.toString()
 
         if (nameStr.isEmpty() || producerStr.isEmpty()) {
-            Toast.makeText(
-                this,
-                "Preencha todos os campos obrigatórios.",
-                Toast.LENGTH_SHORT,
-            ).show()
-
-            return false
+            showToast("Preencha todos os campos obrigatórios.")
+            callback(false)
+            return
         }
 
         if (productIsBeingEdited) {
             productId = product.uid
         }
 
-        product = Product(
-            productId,
-            nameStr,
-            producerStr,
-            descriptionStr
-        )
+        if (imageUrl != null) {
+            uploadImage { imageUploadSuccess ->
+                if (imageUploadSuccess) {
+                    product = Product(
+                        productId,
+                        imageUrl.toString(),
+                        nameStr,
+                        producerStr,
+                        descriptionStr
+                    )
+                    callback(true)
+                } else {
+                    callback(false)
+                }
+            }
+        } else {
+            product = Product(
+                productId,
+                null,
+                nameStr,
+                producerStr,
+                descriptionStr
+            )
+            callback(true)
+        }
+    }
 
-        return true
+    private fun uploadImage(callback: (Boolean) -> Unit) {
+        val imgRef = storageRef.child("images/${UUID.randomUUID()}")
+        imgRef.putFile(imageUrl!!)
+            .addOnSuccessListener {
+                imgRef.downloadUrl.addOnSuccessListener { uri ->
+                    imageUrl = uri // Update the imageUrl with the downloaded URL
+                    callback(true)
+                }.addOnFailureListener {
+                    showToast("Falha ao obter a URL da foto!")
+                    callback(false)
+                }
+            }
+            .addOnFailureListener {
+                showToast("Falha ao carregar a foto!")
+                callback(false)
+            }
     }
 
     private fun cleanFields() {
+        image.setImageResource(R.drawable.ic_empty_image) // Replace with your default image resource
         name.setText("")
         producer.setText("")
         description.setText("")
+        imageUrl = null
     }
 
+    private fun enableSubmitButton() {
+        submitBtn.isEnabled = true
+        submitBtn.isClickable = true
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }

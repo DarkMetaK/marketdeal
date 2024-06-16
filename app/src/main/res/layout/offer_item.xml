@@ -20,7 +20,7 @@
             android:layout_marginRight="20dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background" />
+            android:src="@drawable/ic_empty_image" />
 
         <LinearLayout
             android:layout_width="wrap_content"

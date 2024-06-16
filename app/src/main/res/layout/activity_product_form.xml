@@ -5,110 +5,144 @@
             android:fillViewport="true">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="20dp"
-                android:text="MarketDeal"
-                android:textAlignment="center"
-                android:textColor="@color/primary"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
+                android:layout_gravity="top"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="20dp"
+                    android:text="MarketDeal"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray_2"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_2"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="40dp"
-            android:orientation="vertical">
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineHeight="28sp"
-                android:text="Adicionar Produto"
-                android:textColor="@color/gray_12"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="40dp"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/activity_product_form_name"
+            <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Nome*"
-                    android:inputType="text"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp"/>
+                    android:lineHeight="28sp"
+                    android:text="Adicionar Produto"
+                    android:textColor="@color/gray_12"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                <FrameLayout
+                        android:layout_width="120dp"
+                        android:layout_height="160dp"
+                        android:layout_marginBottom="8dp">
+
+                    <ImageView
+                            android:id="@+id/activity_product_form_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_empty_image"/>
+
+                    <ProgressBar
+                            android:id="@+id/activity_product_form_spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminateDrawable="@drawable/loading_spinner"
+                            android:visibility="gone"/>
+                </FrameLayout>
+
+                <TextView
+                        android:id="@+id/activity_product_form_add_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:lineHeight="24sp"
+                        android:text="Escolher foto"
+                        android:textColor="@color/primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="40dp"
+                        android:clickable="true"/>
 
                 <EditText
-                    android:id="@+id/activity_product_form_producer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Marca*"
-                    android:inputType="text"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp"/>
+                        android:id="@+id/activity_product_form_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/custom_input"
+                        android:hint="Nome*"
+                        android:inputType="text"
+                        android:lineHeight="24sp"
+                        android:minHeight="48dp"
+                        android:padding="12dp"
+                        android:textColorHint="@color/gray_7"
+                        android:textSize="16sp"/>
 
                 <EditText
-                    android:id="@+id/activity_product_form_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:gravity="top"
-                    android:hint="Descrição"
-                    android:inputType="text|textMultiLine"
-                    android:lineHeight="24sp"
-                    android:minHeight="96dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp"/>
+                        android:id="@+id/activity_product_form_producer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/custom_input"
+                        android:hint="Marca*"
+                        android:inputType="text"
+                        android:lineHeight="24sp"
+                        android:minHeight="48dp"
+                        android:padding="12dp"
+                        android:textColorHint="@color/gray_7"
+                        android:textSize="16sp"/>
+
+                <EditText
+                        android:id="@+id/activity_product_form_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="40dp"
+                        android:background="@drawable/custom_input"
+                        android:gravity="top"
+                        android:hint="Descrição"
+                        android:inputType="text|textMultiLine"
+                        android:lineHeight="24sp"
+                        android:minHeight="96dp"
+                        android:padding="12dp"
+                        android:textColorHint="@color/gray_7"
+                        android:textSize="16sp"/>
 
                 <Button
-                    android:id="@+id/activity_product_form_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                        android:id="@+id/activity_product_form_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
 
-                    android:backgroundTint="@color/primary"
-                    android:lineHeight="24sp"
-                    android:paddingVertical="12dp"
-                    android:text="Adicionar Produto"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"/>
+                        android:backgroundTint="@color/primary"
+                        android:lineHeight="24sp"
+                        android:paddingVertical="12dp"
+                        android:text="Adicionar Produto"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"/>
 
             </LinearLayout>
         </LinearLayout>
