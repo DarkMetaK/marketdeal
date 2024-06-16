@@ -6,7 +6,7 @@
                 android:orientation="vertical">
 
     <LinearLayout
-            android:id="@+id/header"
+            android:id="@+id/fragment_product_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -29,9 +29,10 @@
     </LinearLayout>
 
     <TextView
+            android:id="@+id/fragment_product_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/header"
+            android:layout_below="@id/fragment_product_header"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="20dp"
@@ -43,9 +44,13 @@
             android:id="@+id/fragment_product_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/header"
+            android:layout_below="@id/fragment_product_title"
             android:layout_marginHorizontal="20dp"
-            android:layout_above="@+id/fragment_product_fab"/>
+            android:divider="@android:color/transparent"
+            android:dividerHeight="20.0sp"
+            android:paddingBottom="20dp"
+            android:clipToPadding="false"
+            />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fragment_product_fab"
@@ -53,9 +58,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:backgroundTint="@color/gray_6"
+            android:tint="@color/white"
+            app:tint="@color/white"
+            android:backgroundTint="@color/primary"
+            app:backgroundTint="@color/primary"
             android:layout_margin="16dp"
             android:clickable="true"
             android:contentDescription="Adicionar novo produto"
-            app:srcCompat="@drawable/ic_bag"/>
+            app:srcCompat="@drawable/ic_add"/>
+
 </RelativeLayout>

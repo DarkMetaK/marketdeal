@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import br.com.marketdeal.R
 import br.com.marketdeal.model.Product
 import br.com.marketdeal.utils.ImageLoader
+import com.google.android.material.imageview.ShapeableImageView
 
 class ProductAdapter(private val context: Context) : BaseAdapter() {
     private val products = ArrayList<Product>()
@@ -34,7 +34,7 @@ class ProductAdapter(private val context: Context) : BaseAdapter() {
 
         val product = products[position]
 
-        val image = createdView.findViewById<ImageView>(R.id.product_item_image)
+        val image = createdView.findViewById<ShapeableImageView>(R.id.product_item_image)
         val spinner = createdView.findViewById<ProgressBar>(R.id.product_item_spinner)
         val title = createdView.findViewById<TextView>(R.id.product_item_title)
         val producer = createdView.findViewById<TextView>(R.id.product_item_producer)
