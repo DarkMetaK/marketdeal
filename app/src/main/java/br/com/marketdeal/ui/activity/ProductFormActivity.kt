@@ -1,7 +1,9 @@
 package br.com.marketdeal.ui.activity
 
+import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -46,7 +48,8 @@ class ProductFormActivity : AppCompatActivity() {
     private val producer by lazy { findViewById<TextInputEditText>(R.id.activity_product_form_producer) }
 
     private val description by lazy { findViewById<TextInputEditText>(R.id.activity_product_form_description) }
-    private val submitBtn by lazy { findViewById<Button>(R.id.activity_product_form_btn) }
+    private val submitBtn by lazy { findViewById<Button>(R.id.activity_product_form_submit_btn) }
+    private val deleteBtn by lazy { findViewById<Button>(R.id.activity_product_form_delete_btn) }
     private val imageBtn by lazy { findViewById<TextView>(R.id.activity_product_form_add_image) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +60,7 @@ class ProductFormActivity : AppCompatActivity() {
         verifyIfProductIsBeingEdited()
         configImageBtn()
         configSubmitBtn()
+        configDeleteButton()
     }
 
     private fun verifyIfProductIsBeingEdited() {
@@ -97,10 +101,22 @@ class ProductFormActivity : AppCompatActivity() {
                         addNewProduct()
                     }
                 } else {
-                    it.isEnabled = true
-                    it.isClickable = true
+                    enableSubmitButton()
                 }
             }
+        }
+    }
+
+    private fun configDeleteButton() {
+        if (productIsBeingEdited) {
+            deleteBtn.setOnClickListener {
+                it.isEnabled = false
+                it.isClickable = false
+
+                deleteDialog()
+            }
+        } else {
+            deleteBtn.visibility = View.GONE
         }
     }
 
@@ -216,6 +232,37 @@ class ProductFormActivity : AppCompatActivity() {
         return amountOfErrors == 0
     }
 
+    private fun deleteDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setMessage("Deseja realmente apagar esse produto?")
+            .setTitle("Excluir Produto")
+            .setPositiveButton("Confirmar") { _, _ ->
+                deleteProduct { productWasSuccessfullyDeleted ->
+                    if (productWasSuccessfullyDeleted) {
+                        finish()
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar") { _, _ -> }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        enableDeleteButton()
+    }
+
+    private fun deleteProduct(callback: (Boolean) -> Unit) {
+        database.child("products").child(product.uid).removeValue()
+            .addOnSuccessListener {
+                showToast("Produto deletado com sucesso!")
+                callback(true)
+            }
+            .addOnFailureListener {
+                showToast("Falha ao deletar o produto.")
+                callback(false)
+            }
+    }
+
     private fun cleanFields() {
         image.setImageResource(R.drawable.ic_empty_image)
         name.setText("")
@@ -227,6 +274,11 @@ class ProductFormActivity : AppCompatActivity() {
     private fun enableSubmitButton() {
         submitBtn.isEnabled = true
         submitBtn.isClickable = true
+    }
+
+    private fun enableDeleteButton() {
+        deleteBtn.isEnabled = true
+        deleteBtn.isClickable = true
     }
 
     private fun showToast(message: String) {
