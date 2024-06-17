@@ -3,21 +3,23 @@ package br.com.marketdeal.model
 import com.google.firebase.database.Exclude
 
 data class Market(
-    val id: String = "",
-    val name: String = "",
-    val  number : String="",
-    val  street : String="",
-    val  neighborhood : String="",
-    val  city : String=""
-
+    var uid: String = "",
+    var name: String = "",
+    var city: String = "",
+    var neighborhood: String = "",
+    var street: String = "",
+    var number: String = ""
 ) {
 
     @Exclude
     fun toMap(): Map<String, Any?> {
         return mapOf(
-            "uid" to id,
+            "uid" to uid,
             "name" to name,
-            "address" to address,
+            "city" to city,
+            "neighborhood" to neighborhood,
+            "street" to street,
+            "number" to number,
         )
     }
 

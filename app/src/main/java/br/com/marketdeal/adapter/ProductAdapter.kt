@@ -48,11 +48,11 @@ class ProductAdapter(private val context: Context) : BaseAdapter() {
 
         val product = products[position]
 
-        val image = createdView.findViewById<ShapeableImageView>(R.id.product_item_image)
-        val spinner = createdView.findViewById<ProgressBar>(R.id.product_item_spinner)
-        val title = createdView.findViewById<TextView>(R.id.product_item_title)
-        val producer = createdView.findViewById<TextView>(R.id.product_item_producer)
-        val description = createdView.findViewById<TextView>(R.id.product_item_description)
+        val image = createdView.findViewById<ShapeableImageView>(R.id.item_product_image)
+        val spinner = createdView.findViewById<ProgressBar>(R.id.item_product_spinner)
+        val title = createdView.findViewById<TextView>(R.id.item_product_title)
+        val producer = createdView.findViewById<TextView>(R.id.item_product_producer)
+        val description = createdView.findViewById<TextView>(R.id.item_product_description)
 
         if (product.imageUrl != null) {
             ImageLoader.loadImage(context, product.imageUrl, image, spinner)

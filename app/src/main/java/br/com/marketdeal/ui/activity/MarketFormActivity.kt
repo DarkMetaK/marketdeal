@@ -1,16 +1,14 @@
 package br.com.marketdeal.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import br.com.marketdeal.R
-import br.com.marketdeal.model.Cep
 import br.com.marketdeal.model.Market
+import br.com.marketdeal.utils.CepSearcher
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
@@ -18,124 +16,112 @@ import java.util.UUID
 
 class MarketFormActivity : AppCompatActivity() {
     private val database by lazy { Firebase.database.reference }
-    private val cep : Cep=Cep()
-    private val registerBtn by lazy { findViewById<Button>(R.id.market_register_btn) }
-    private val txtName by lazy { findViewById<EditText>(R.id.market_name) }
-    private val txtCep by lazy { findViewById<EditText>(R.id.cep_market) }
-    private val txtStreet by lazy { findViewById<EditText>(R.id.street_market) }
-    private val txtNumber by lazy { findViewById<EditText>(R.id.number_market) }
-    private val txtNeighborhood by lazy { findViewById<EditText>(R.id.nbr_market) }
-    private val txtCity by lazy { findViewById<EditText>(R.id.city_market) }
+
+    private val name by lazy { findViewById<TextInputEditText>(R.id.activity_form_market_name) }
+    private val cep by lazy { findViewById<TextInputEditText>(R.id.activity_form_market_cep) }
+    private val street by lazy { findViewById<TextInputEditText>(R.id.activity_form_market_street) }
+    private val number by lazy { findViewById<TextInputEditText>(R.id.activity_form_market_number) }
+    private val neighborhood by lazy { findViewById<TextInputEditText>(R.id.activity_form_market_nbr) }
+    private val city by lazy { findViewById<TextInputEditText>(R.id.activity_form_market_city) }
+
+    private val registerBtn by lazy { findViewById<Button>(R.id.activity_form_market_register_btn) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form_market)
         supportActionBar?.hide()
+
         configInputs()
     }
 
     private fun configInputs() {
-        registerBtn.setOnClickListener {
-            createMarket()
-        }
-        txtCep.setOnFocusChangeListener { v, hasFocus ->
+        cep.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                if (txtCep.text.length == 8) {
-                    buscarCep(txtCep.text.toString())
+                if (cep.text.toString().length == 8) {
+                    buscarCep(cep.text.toString())
                 } else {
-                    Toast.makeText(this, "Número de caracteres insuficente,", Toast.LENGTH_SHORT).show()
                     cleanFields()
                 }
             }
         }
+
+        registerBtn.setOnClickListener {
+            createMarket()
+        }
     }
-    private fun buscarCep(numCep : String){
+
+    private fun buscarCep(numCep: String) {
+        val searcher = CepSearcher()
+
         lifecycleScope.launch {
             try {
-                cep.buscarCep(numCep)
-                Log.i("cep", cep.bairro.toString())
-                Log.i("cep", cep.cidade.toString())
-                if (cep.cidade!=null) {
-                    Log.i("cep", cep.bairro.toString())
-                    txtStreet.setText(cep.logradouro)
-                    txtNeighborhood.setText(cep.bairro)
-                    txtCity.setText(cep.cidade)
-                    Toast.makeText(
-                        baseContext,
-                        "Endereço encontrado",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                else{
-                    Toast.makeText(
-                        baseContext,
-                        "Endereço não encontrado,verefique o cep e digite novatamente",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                searcher.buscarCep(numCep)
+
+                if (searcher.cidade != null) {
+                    street.setText(searcher.logradouro)
+                    neighborhood.setText(searcher.bairro)
+                    city.setText(searcher.cidade)
+
+                    showToast("Endereço encontrado!")
+                } else {
+                    showToast("Endereço não encontrado, verifique o CEP e digite novamente.")
                     cleanFields()
                 }
             } catch (e: Exception) {
+                showToast("Erro ao buscar endereço, por favor tente novamente.")
+                cleanFields()
                 e.printStackTrace()
             }
         }
     }
+
     private fun createMarket() {
-        val nameStr = txtName.text.toString()
-        val numberStr = txtNumber.text.toString()
-        val streetStr = txtStreet.text.toString()
-        val neighborhoodStr = txtNeighborhood.text.toString()
-        val cityStr = txtCity.text.toString()
-
-
+        val nameStr = name.text.toString()
+        val numberStr = number.text.toString()
+        val streetStr = street.text.toString()
+        val neighborhoodStr = neighborhood.text.toString()
+        val cityStr = city.text.toString()
 
         if (nameStr.isBlank() || numberStr.isBlank() || streetStr.isBlank() || neighborhoodStr.isBlank() || cityStr.isBlank()) {
-            Toast.makeText(
-                baseContext,
-                "Preencha todos os campos",
-                Toast.LENGTH_SHORT
-            ).show()
+            showToast("Preencha todos os campos")
             return
         }
 
         val market = Market(
-            id = UUID.randomUUID().toString(),
-            name = nameStr,
-            number = numberStr,
-            street = streetStr,
-            neighborhood = neighborhoodStr,
-            city = cityStr
+            UUID.randomUUID().toString(),
+            nameStr,
+            cityStr,
+            neighborhoodStr,
+            streetStr,
+            numberStr,
         )
+
         registerMarket(market)
     }
 
     private fun cleanFields() {
-        txtCep.setText("")
-        txtStreet.setText("")
-        txtName.setText("")
-        txtNeighborhood.setText("")
-        txtCity.setText("")
-        txtNumber.setText("")
+        cep.setText("")
+        street.setText("")
+        // name.setText("")
+        neighborhood.setText("")
+        city.setText("")
+        // number.setText("")
     }
 
     private fun registerMarket(market: Market) {
-        database.child("markets").child(market.id).setValue(market)
+        database.child("markets").child(market.uid).setValue(market)
             .addOnSuccessListener {
-                Toast.makeText(
-                    this,
-                    "Mercado registrado com sucesso!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast("Mercado registrado com sucesso!")
                 cleanFields()
-                val intent = Intent(this, MainActivity::class.java)
+
                 finish()
-                startActivity(intent)
             }
             .addOnFailureListener {
-                Toast.makeText(
-                    this,
-                    "Falha ao registrar mercado, por favor tente novamente!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast("Falha ao registrar mercado, por favor tente novamente!")
             }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

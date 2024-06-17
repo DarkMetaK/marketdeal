@@ -48,14 +48,14 @@ class OfferAdapter(private val context: Context) : BaseAdapter() {
 
         val offer = offers[position]
 
-        val image = createdView.findViewById<ShapeableImageView>(R.id.offer_item_image)
-        val spinner = createdView.findViewById<ProgressBar>(R.id.offer_item_spinner)
-        val title = createdView.findViewById<TextView>(R.id.offer_item_title)
-        val date = createdView.findViewById<TextView>(R.id.offer_item_date)
-        val size = createdView.findViewById<TextView>(R.id.offer_item_size)
-        val market = createdView.findViewById<TextView>(R.id.offer_item_market)
-        val originalPrice = createdView.findViewById<TextView>(R.id.offer_item_original_price)
-        val currentPrice = createdView.findViewById<TextView>(R.id.offer_item_current_price)
+        val image = createdView.findViewById<ShapeableImageView>(R.id.item_offer_image)
+        val spinner = createdView.findViewById<ProgressBar>(R.id.item_offer_spinner)
+        val title = createdView.findViewById<TextView>(R.id.item_offer_title)
+        val date = createdView.findViewById<TextView>(R.id.item_offer_date)
+        val size = createdView.findViewById<TextView>(R.id.item_offer_size)
+        val market = createdView.findViewById<TextView>(R.id.item_offer_market)
+        val originalPrice = createdView.findViewById<TextView>(R.id.item_offer_original_price)
+        val currentPrice = createdView.findViewById<TextView>(R.id.item_offer_current_price)
 
         if (offer.imageUrl != null) {
             ImageLoader.loadImage(context, offer.imageUrl, image, spinner)

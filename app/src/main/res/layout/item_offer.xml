@@ -26,7 +26,7 @@
                     android:layout_marginEnd="20dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/offer_item_image"
+                        android:id="@+id/item_offer_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
@@ -38,7 +38,7 @@
                         app:strokeWidth="1dp"/>
 
                 <ProgressBar
-                        android:id="@+id/offer_item_spinner"
+                        android:id="@+id/item_offer_spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -54,11 +54,10 @@
                     android:gravity="start">
 
                 <TextView
-                        android:id="@+id/offer_item_title"
+                        android:id="@+id/item_offer_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="Arroz Prato Fino"
                         android:textColor="@color/gray_12"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
@@ -70,51 +69,46 @@
                         android:orientation="horizontal">
 
                     <TextView
-                            android:id="@+id/offer_item_date"
+                            android:id="@+id/item_offer_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="8dp"
-                            android:text="07/04/2024"
+                            android:layout_marginEnd="8dp"
                             android:textColor="@color/gray_9"
                             android:textSize="12sp"
                             android:textStyle="normal"/>
 
                     <TextView
-                            android:id="@+id/offer_item_size"
+                            android:id="@+id/item_offer_size"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="5kg"
                             android:textColor="@color/gray_9"
                             android:textSize="12sp"
                             android:textStyle="normal"/>
                 </LinearLayout>
 
                 <TextView
-                        android:id="@+id/offer_item_market"
+                        android:id="@+id/item_offer_market"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="Supermercado Kampai"
                         android:textColor="@color/gray_9"
                         android:textSize="12sp"
                         android:textStyle="normal"/>
 
                 <TextView
-                        android:id="@+id/offer_item_original_price"
+                        android:id="@+id/item_offer_original_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
                         android:foreground="@drawable/strikethrough"
-                        android:text="R$ 36,99"
                         android:textColor="@color/gray_9"
                         android:textSize="12sp"
                         android:textStyle="normal"/>
 
                 <TextView
-                        android:id="@+id/offer_item_current_price"
+                        android:id="@+id/item_offer_current_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="R$ 36,99"
                         android:textColor="@color/primary"
                         android:textSize="16sp"
                         android:textStyle="bold"/>

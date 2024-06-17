@@ -19,15 +19,16 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class StoreFragment : Fragment(R.layout.fragment_store) {
-    private lateinit var AddMarketBtn: FloatingActionButton
+class MarketFragment : Fragment() {
     private val database by lazy { Firebase.database.reference }
+
+    private lateinit var addMarketBtn: FloatingActionButton
     private lateinit var marketAdapter: MarketAdapter
     private val marketListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val marketArray = ArrayList<Market>()
 
-            for (suggestionSnapshot in dataSnapshot.getChildren()) {
+            for (suggestionSnapshot in dataSnapshot.children) {
                 val market = suggestionSnapshot.getValue(Market::class.java);
 
                 if (market != null) {
@@ -49,17 +50,21 @@ class StoreFragment : Fragment(R.layout.fragment_store) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater!!.inflate(R.layout.fragment_store, container, false)
+        val view = inflater.inflate(R.layout.fragment_market, container, false)
 
-        initializeAndConfigList(view)
-        database.child("markets").addValueEventListener(marketListener)
         initializeFields(view)
-        AddMarketBtnConfig()
+        initializeAndConfigList(view)
+        addMarketBtnConfig()
+
+        database.child("markets").addValueEventListener(marketListener)
+
         return view
     }
+
     private fun initializeFields(view: View) {
-        AddMarketBtn = view.findViewById(R.id.floatingAddMarket)
+        addMarketBtn = view.findViewById(R.id.fragment_market_fab)
     }
+
     private fun initializeAndConfigList(view: View) {
         marketAdapter = MarketAdapter(view.context)
         marketList = view.findViewById(R.id.fragment_market_list)
@@ -67,11 +72,10 @@ class StoreFragment : Fragment(R.layout.fragment_store) {
         marketList.adapter = marketAdapter
     }
 
-    private fun AddMarketBtnConfig() {
-        AddMarketBtn.setOnClickListener {
+    private fun addMarketBtnConfig() {
+        addMarketBtn.setOnClickListener {
             val intent = Intent(requireActivity(), MarketFormActivity::class.java)
             startActivity(intent)
-            requireActivity().finish()
         }
     }
 

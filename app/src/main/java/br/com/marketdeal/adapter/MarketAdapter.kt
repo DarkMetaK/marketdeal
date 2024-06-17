@@ -13,6 +13,20 @@ import br.com.marketdeal.model.Market
 class MarketAdapter(private val context: Context) : BaseAdapter() {
     private val markets = ArrayList<Market>()
 
+    private fun addAll(items: List<Market>) {
+        markets.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun update(items: List<Market>) {
+        clear()
+        addAll(items)
+    }
+
+    private fun clear() {
+        markets.clear()
+    }
+
     override fun getCount(): Int {
         return markets.size
     }
@@ -28,7 +42,7 @@ class MarketAdapter(private val context: Context) : BaseAdapter() {
     override fun getView(position: Int, view: View?, viewGroup: ViewGroup?): View {
         val createdView = LayoutInflater
             .from(context)
-            .inflate(R.layout.market_item, viewGroup, false)
+            .inflate(R.layout.item_market, viewGroup, false)
 
         val mkt = markets[position]
 
@@ -36,11 +50,11 @@ class MarketAdapter(private val context: Context) : BaseAdapter() {
         Log.i(mkt.neighborhood, "neighborhood")
         Log.i(mkt.city, "city")
 
-        val name = createdView.findViewById<TextView>(R.id.market_name_item)
-        val city = createdView.findViewById<TextView>(R.id.market_city_item)
-        val neighborhood= createdView.findViewById<TextView>(R.id.market_neighborhood_item)
-        val number = createdView.findViewById<TextView>(R.id.market_number_item)
-        val street = createdView.findViewById<TextView>(R.id.market_street_item)
+        val name = createdView.findViewById<TextView>(R.id.item_market_name)
+        val city = createdView.findViewById<TextView>(R.id.item_market_city)
+        val neighborhood= createdView.findViewById<TextView>(R.id.item_market_neighborhood)
+        val number = createdView.findViewById<TextView>(R.id.item_market_number)
+        val street = createdView.findViewById<TextView>(R.id.item_market_street)
 
         name.text = mkt.name
         city.text = mkt.city
@@ -51,22 +65,4 @@ class MarketAdapter(private val context: Context) : BaseAdapter() {
         return createdView
     }
 
-    fun update(items: List<Market>) {
-        clear()
-        addAll(items)
-    }
-
-    fun remove(item: Market) {
-        markets.remove(item)
-        notifyDataSetChanged()
-    }
-
-    private fun clear() {
-        markets.clear()
-    }
-
-    private fun addAll(items: List<Market>) {
-        markets.addAll(items)
-        notifyDataSetChanged()
-    }
 }
