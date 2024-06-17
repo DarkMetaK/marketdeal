@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import br.com.marketdeal.R
 import br.com.marketdeal.model.Product
 import br.com.marketdeal.utils.ImageLoader
@@ -62,8 +63,9 @@ class ProductFormActivity : AppCompatActivity() {
         val intentProduct = intent?.extras?.getSerializable("product") as Product?
 
         if (intentProduct != null) {
-            if (intentProduct.imageUrl != null) {
+            if (!intentProduct.imageUrl.isNullOrEmpty()) {
                 ImageLoader.loadImage(this, intentProduct.imageUrl, image, spinner)
+                imageUrl = intentProduct.imageUrl!!.toUri()
             }
 
             name.setText(intentProduct.name)
@@ -147,7 +149,7 @@ class ProductFormActivity : AppCompatActivity() {
             productId = product.uid
         }
 
-        if (imageUrl != null) {
+        if (imageUrl != null && (!productIsBeingEdited || product.imageUrl?.toUri() != imageUrl)) {
             uploadImage { imageUploadSuccess ->
                 if (imageUploadSuccess) {
                     product = Product(
@@ -165,7 +167,7 @@ class ProductFormActivity : AppCompatActivity() {
         } else {
             product = Product(
                 productId,
-                null,
+                imageUrl?.toString(),
                 nameStr,
                 producerStr,
                 descriptionStr

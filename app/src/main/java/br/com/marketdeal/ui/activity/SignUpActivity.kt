@@ -63,6 +63,8 @@ class SignUpActivity : AppCompatActivity() {
                 }
             } else {
                 showToast("Preencha todos os campos obrigatórios.")
+                it.isEnabled = true
+                it.isClickable = true
             }
         }
     }
