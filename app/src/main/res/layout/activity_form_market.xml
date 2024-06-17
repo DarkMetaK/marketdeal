@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:backgroundTint="#000">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,17 +49,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:lineHeight="28sp"
-                    android:text="Seu Perfil"
+                    android:text="Adicionar mercado"
                     android:textColor="@color/gray_12"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/fragment_profile_logout_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/cardview_dark_background"
-                    android:text="Sair" />
             </LinearLayout>
 
 
@@ -67,91 +60,112 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:gravity="top"
+                android:orientation="vertical"
+                >
 
                 <EditText
-                    android:id="@+id/fragment_profile_name"
+                    android:id="@+id/market_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
-                    android:hint="Nome"
+                    android:hint="Nome do estabelicimento"
                     android:inputType="textCapWords"
                     android:lineHeight="24sp"
                     android:minHeight="48dp"
                     android:padding="12dp"
                     android:textColorHint="@color/gray_7"
                     android:textSize="16sp" />
-
                 <EditText
-                    android:id="@+id/fragment_profile_phone"
+                    android:id="@+id/cep_market"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
-                    android:hint="Telefone"
-                    android:inputType="phone"
+                    android:hint="CEP"
+                    android:inputType="number"
                     android:lineHeight="24sp"
                     android:minHeight="48dp"
                     android:padding="12dp"
                     android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
-
+                    android:textSize="16sp"
+                    android:maxLength="8"/>
                 <EditText
-                    android:id="@+id/fragment_profile_email"
+                    android:id="@+id/number_market"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
-                    android:hint="E-mail"
-                    android:inputType="textEmailAddress"
+                    android:hint="Número do logradouro"
+                    android:inputType="number"
                     android:lineHeight="24sp"
                     android:minHeight="48dp"
                     android:padding="12dp"
                     android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:maxLength="4"/>
 
                 <EditText
-                    android:id="@+id/fragment_profile_password"
+                    android:id="@+id/street_market"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/custom_input"
-                    android:hint="Senha"
-                    android:inputType="textPassword"
+                    android:hint="Rua"
+                    android:inputType="text"
                     android:lineHeight="24sp"
                     android:minHeight="48dp"
                     android:padding="12dp"
                     android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:enabled="false" />
+
+                <EditText
+                    android:id="@+id/nbr_market"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/custom_input"
+                    android:hint="Bairro"
+                    android:inputType="text"
+                    android:lineHeight="24sp"
+                    android:minHeight="48dp"
+                    android:padding="12dp"
+                    android:textColorHint="@color/gray_7"
+                    android:textSize="16sp"
+                    android:enabled="false" />
+                <EditText
+                    android:id="@+id/city_market"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/custom_input"
+                    android:hint="Cidade"
+                    android:inputType="text"
+                    android:lineHeight="24sp"
+                    android:minHeight="48dp"
+                    android:padding="12dp"
+                    android:textColorHint="@color/gray_7"
+                    android:textSize="16sp"
+                    android:enabled="false" />
 
                 <Button
-                    android:id="@+id/fragment_profile_update_btn"
+                    android:id="@+id/market_register_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:backgroundTint="@color/primary"
                     android:lineHeight="24sp"
                     android:paddingVertical="12dp"
-                    android:text="Atualizar Perfil"
+                    android:text="Registrar estabelicmento"
                     android:textAllCaps="false"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:id="@+id/fragment_profile_delete_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/destructive"
-                    android:lineHeight="24sp"
-                    android:paddingVertical="12dp"
-                    android:text="Deletar Conta"
-                    android:textAllCaps="false"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:layout_gravity="bottom" />
 
             </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
