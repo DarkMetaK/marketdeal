@@ -161,13 +161,24 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
-                        android:id="@+id/activity_product_form_btn"
+                        android:id="@+id/activity_product_form_submit_btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/primary"
                         android:lineHeight="24sp"
                         android:paddingVertical="12dp"
                         android:text="Adicionar Produto"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"/>
+
+                <Button
+                        android:id="@+id/activity_product_form_delete_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/destructive"
+                        android:lineHeight="24sp"
+                        android:paddingVertical="12dp"
+                        android:text="Apagar Produto"
                         android:textAllCaps="false"
                         android:textSize="16sp"/>
 

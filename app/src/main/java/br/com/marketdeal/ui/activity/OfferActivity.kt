@@ -5,20 +5,25 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.marketdeal.R
 import br.com.marketdeal.model.Market
 import br.com.marketdeal.model.Offer
+import br.com.marketdeal.utils.ImageLoader
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class OfferActivity : AppCompatActivity() {
     private val database by lazy { Firebase.database.reference }
-    private val userId by lazy { Firebase.auth.currentUser?.uid ?: null }
+    private val userId by lazy { Firebase.auth.currentUser?.uid }
 
+    private val image by lazy { findViewById<ShapeableImageView>(R.id.activity_offer_image) }
+    private val spinner by lazy { findViewById<ProgressBar>(R.id.activity_offer_spinner) }
     private val title by lazy { findViewById<TextView>(R.id.activity_offer_title) }
     private val date by lazy { findViewById<TextView>(R.id.activity_offer_date) }
     private val size by lazy { findViewById<TextView>(R.id.activity_offer_size) }
@@ -53,6 +58,7 @@ class OfferActivity : AppCompatActivity() {
                 if (foundOffer != null) {
                     offer = foundOffer
 
+                    ImageLoader.loadImage(this, offer.imageUrl, image, spinner)
                     initializeFields()
                     configDeleteButton()
                     configEditButton()
@@ -83,8 +89,8 @@ class OfferActivity : AppCompatActivity() {
         title.text = offer.productName
         date.text = offer.createdAt
         size.text = offer.size
-        originalPrice.text = offer.originalPrice.toString()
-        currentPrice.text = offer.currentPrice.toString()
+        originalPrice.text = "R$ " + offer.originalPrice.toString()
+        currentPrice.text = "R$ " + offer.currentPrice.toString()
         observations.text = offer.observations
     }
 

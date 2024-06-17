@@ -55,9 +55,12 @@ class OfferFragment : Fragment() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             for (suggestionSnapshot in dataSnapshot.children) {
                 val name = suggestionSnapshot.child("name").getValue(String::class.java)
+                val imageUrl = suggestionSnapshot.child("imageUrl").getValue(String::class.java)
+
                 val dto = ProductSpinnerDTO(
                     suggestionSnapshot.key.toString(),
-                    name!!
+                    name!!,
+                    imageUrl
                 )
 
                 productList.add(dto)
@@ -70,7 +73,7 @@ class OfferFragment : Fragment() {
                 val product = productList.find { dto -> dto.id == offer.productId }
 
                 if (product != null) {
-                    val dto = ProductSpinnerDTO(product.id, product.name)
+                    val dto = ProductSpinnerDTO(product.id, product.name, product.imageUrl)
                     selectedProduct = dto
                     productAutocomplete.setText(dto.toString(), false)
                 }
@@ -289,6 +292,7 @@ class OfferFragment : Fragment() {
         val marketName = selectedMarket!!.name
         val productId = selectedProduct!!.id
         val productName = selectedProduct!!.name
+        val imageUrl = selectedProduct!!.imageUrl
 
         if (offerIsBeingEdited) {
             offerId = offer.uid
@@ -305,6 +309,7 @@ class OfferFragment : Fragment() {
             marketName,
             productId,
             productName,
+            imageUrl,
             userId
         )
 

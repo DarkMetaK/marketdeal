@@ -1,122 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:fillViewport="true">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:backgroundTint="@color/gray_1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/gray_1"
             android:gravity="center"
             android:orientation="vertical">
 
+        <LinearLayout
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="40dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="40dp"
-                android:text="MarketDeal"
-                android:textColor="@color/primary"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp"
+                    android:text="MarketDeal"
+                    android:textColor="@color/primary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
 
-            <EditText
-                android:id="@+id/activity_sign_up_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_input"
-                android:hint="Nome"
-                android:inputType="textCapWords"
-                android:lineHeight="24sp"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:textColorHint="@color/gray_7"
-                android:textSize="16sp" />
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/activity_sign_up_name_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nome*"
+                    android:layout_marginBottom="8dp"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:errorEnabled="true"
+                    app:errorTextColor="@color/destructive"
+                    app:endIconMode="clear_text"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    >
 
-            <EditText
-                android:id="@+id/activity_sign_up_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_input"
-                android:hint="Telefone"
-                android:inputType="phone"
-                android:lineHeight="24sp"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:textColorHint="@color/gray_7"
-                android:textSize="16sp" />
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/activity_sign_up_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray_12"
+                        android:maxLength="64"
+                        android:inputType="text"/>
 
-            <EditText
-                android:id="@+id/activity_sign_up_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_input"
-                android:hint="E-mail"
-                android:inputType="textEmailAddress"
-                android:lineHeight="24sp"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:textColorHint="@color/gray_7"
-                android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/activity_sign_up_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/custom_input"
-                android:hint="Senha"
-                android:inputType="textPassword"
-                android:lineHeight="24sp"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:textColorHint="@color/gray_7"
-                android:textSize="16sp" />
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/activity_sign_up_phone_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Telefone*"
+                    android:layout_marginBottom="8dp"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:errorEnabled="true"
+                    app:errorTextColor="@color/destructive"
+                    app:endIconMode="clear_text"
+                    app:prefixText="+55 "
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/activity_sign_up_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray_12"
+                        android:maxLength="13"
+                        android:inputType="phone"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/activity_sign_up_email_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="E-mail*"
+                    android:layout_marginBottom="8dp"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:errorEnabled="true"
+                    app:errorTextColor="@color/destructive"
+                    app:endIconMode="clear_text"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/activity_sign_up_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray_12"
+                        android:inputType="textEmailAddress"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/activity_sign_up_password_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Senha*"
+                    android:layout_marginBottom="8dp"
+                    app:boxBackgroundColor="@android:color/transparent"
+                    app:errorEnabled="true"
+                    app:errorTextColor="@color/destructive"
+                    app:endIconMode="password_toggle"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    >
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/activity_sign_up_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray_12"
+                        android:maxLength="64"
+                        android:inputType="textPassword"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/activity_sign_up_register_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/primary"
-                android:lineHeight="24sp"
-                android:paddingVertical="12dp"
-                android:text="Criar conta"
-                android:textAllCaps="false"
-                android:textSize="16sp" />
+                    android:id="@+id/activity_sign_up_register_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:backgroundTint="@color/primary"
+                    android:lineHeight="24sp"
+                    android:paddingVertical="12dp"
+                    android:text="Criar conta"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"/>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:lineHeight="24sp"
-                    android:text="Já possui conta? "
-                    android:textColor="@color/gray_12"
-                    android:textSize="16sp" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineHeight="24sp"
+                        android:text="Já possui conta? "
+                        android:textColor="@color/gray_12"
+                        android:textSize="16sp"/>
 
                 <TextView
-                    android:id="@+id/activity_sign_up_redirect_link"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:lineHeight="24sp"
-                    android:text="Realize login"
-                    android:textColor="@color/primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                        android:id="@+id/activity_sign_up_redirect_link"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:lineHeight="24sp"
+                        android:text="Realize login"
+                        android:textColor="@color/primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
             </LinearLayout>
 
         </LinearLayout>

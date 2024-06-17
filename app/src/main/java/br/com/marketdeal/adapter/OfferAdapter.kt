@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ProgressBar
 import android.widget.TextView
 import br.com.marketdeal.R
 import br.com.marketdeal.model.Offer
+import br.com.marketdeal.utils.ImageLoader
+import com.google.android.material.imageview.ShapeableImageView
 
 class OfferAdapter(private val context: Context) : BaseAdapter() {
     private val offers = ArrayList<Offer>()
@@ -45,12 +48,20 @@ class OfferAdapter(private val context: Context) : BaseAdapter() {
 
         val offer = offers[position]
 
+        val image = createdView.findViewById<ShapeableImageView>(R.id.offer_item_image)
+        val spinner = createdView.findViewById<ProgressBar>(R.id.offer_item_spinner)
         val title = createdView.findViewById<TextView>(R.id.offer_item_title)
         val date = createdView.findViewById<TextView>(R.id.offer_item_date)
         val size = createdView.findViewById<TextView>(R.id.offer_item_size)
         val market = createdView.findViewById<TextView>(R.id.offer_item_market)
         val originalPrice = createdView.findViewById<TextView>(R.id.offer_item_original_price)
         val currentPrice = createdView.findViewById<TextView>(R.id.offer_item_current_price)
+
+        if (offer.imageUrl != null) {
+            ImageLoader.loadImage(context, offer.imageUrl, image, spinner)
+        } else {
+            image.setImageResource(R.drawable.ic_empty_image)
+        }
 
         title.text = offer.productName
         date.text = offer.createdAt
