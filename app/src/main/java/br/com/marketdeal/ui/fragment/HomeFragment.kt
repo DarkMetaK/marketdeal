@@ -26,7 +26,7 @@ class HomeFragment : Fragment() {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val offerArray = ArrayList<Offer>()
 
-            for (suggestionSnapshot in dataSnapshot.getChildren()) {
+            for (suggestionSnapshot in dataSnapshot.children) {
                 val offer = suggestionSnapshot.getValue(Offer::class.java);
 
                 if (offer != null) {
@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater!!.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         initializeAndConfigList(view)
         database.child("offers").addValueEventListener(offerListener)

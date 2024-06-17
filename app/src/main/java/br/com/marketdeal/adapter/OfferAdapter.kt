@@ -12,6 +12,20 @@ import br.com.marketdeal.model.Offer
 class OfferAdapter(private val context: Context) : BaseAdapter() {
     private val offers = ArrayList<Offer>()
 
+    private fun addAll(items: List<Offer>) {
+        offers.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun update(items: List<Offer>) {
+        clear()
+        addAll(items)
+    }
+
+    private fun clear() {
+        offers.clear()
+    }
+
     override fun getCount(): Int {
         return offers.size
     }
@@ -27,7 +41,7 @@ class OfferAdapter(private val context: Context) : BaseAdapter() {
     override fun getView(position: Int, view: View?, viewGroup: ViewGroup?): View {
         val createdView = LayoutInflater
             .from(context)
-            .inflate(R.layout.offer_item, viewGroup, false)
+            .inflate(R.layout.item_offer, viewGroup, false)
 
         val offer = offers[position]
 
@@ -48,22 +62,4 @@ class OfferAdapter(private val context: Context) : BaseAdapter() {
         return createdView
     }
 
-    fun update(items: List<Offer>) {
-        clear()
-        addAll(items)
-    }
-
-    fun remove(item: Offer) {
-        offers.remove(item)
-        notifyDataSetChanged()
-    }
-
-    private fun clear() {
-        offers.clear()
-    }
-
-    private fun addAll(items: List<Offer>) {
-        offers.addAll(items)
-        notifyDataSetChanged()
-    }
 }
