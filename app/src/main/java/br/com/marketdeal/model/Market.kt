@@ -1,6 +1,5 @@
 package br.com.marketdeal.model
 
-import android.location.Address
 import com.google.firebase.database.Exclude
 
 data class Market(

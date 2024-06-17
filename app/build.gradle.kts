@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+    implementation("com.google.code.gson:gson:2.8.9")
     implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-auth")
