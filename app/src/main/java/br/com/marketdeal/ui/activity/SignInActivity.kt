@@ -3,20 +3,26 @@ package br.com.marketdeal.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.marketdeal.R
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class SignInActivity : AppCompatActivity() {
-    private val email by lazy { findViewById<EditText>(R.id.activity_sign_in_email) }
-    private val password by lazy { findViewById<TextView>(R.id.activity_sign_in_password) }
+    private val auth by lazy { Firebase.auth }
+
+    private val emailLayout by lazy { findViewById<TextInputLayout>(R.id.activity_sign_in_email_layout) }
+    private val email by lazy { findViewById<TextInputEditText>(R.id.activity_sign_in_email) }
+
+    private val passwordLayout by lazy { findViewById<TextInputLayout>(R.id.activity_sign_in_password_layout) }
+    private val password by lazy { findViewById<TextInputEditText>(R.id.activity_sign_in_password) }
+
     private val loginBtn by lazy { findViewById<Button>(R.id.activity_sign_in_login_btn) }
     private val signUpBtn by lazy { findViewById<TextView>(R.id.activity_sign_in_redirect_link) }
-    private val auth by lazy { Firebase.auth }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +36,17 @@ class SignInActivity : AppCompatActivity() {
 
     private fun configLoginButton() {
         loginBtn.setOnClickListener {
-            signIn()
+            it.isEnabled = false
+            it.isClickable = false
+
+            if (validateFields()) {
+                signIn()
+            } else {
+                showToast("Preencha todos os campos.")
+            }
+
+            it.isEnabled = true
+            it.isClickable = true
         }
     }
 
@@ -45,16 +61,6 @@ class SignInActivity : AppCompatActivity() {
         val emailStr = email.text.toString()
         val passwordStr = password.text.toString()
 
-        if (emailStr.isNullOrBlank() || passwordStr.isNullOrBlank()) {
-            Toast.makeText(
-                baseContext,
-                "Preencha todos os campos",
-                Toast.LENGTH_SHORT,
-            ).show()
-
-            return
-        }
-
         auth.signInWithEmailAndPassword(emailStr, passwordStr)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -62,13 +68,37 @@ class SignInActivity : AppCompatActivity() {
                     finish()
                     startActivity(intent)
                 } else {
-                    Toast.makeText(
-                        baseContext,
-                        "Usuário não encontrado com este e-mail e senha.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showToast("Usuário não encontrado com essas credenciais.")
                 }
             }
     }
 
+    private fun validateFields(): Boolean {
+        var amountOfErrors = 0
+        val emailStr = email.text.toString()
+        val passwordStr = password.text.toString()
+
+        if (emailStr.isEmpty()) {
+            emailLayout.error = "O e-mail é obrigatório."
+            amountOfErrors++
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailStr).matches()) {
+            emailLayout.error = "O e-mail não é válido."
+            amountOfErrors++
+        } else {
+            emailLayout.error = null
+        }
+
+        if (passwordStr.isEmpty()) {
+            passwordLayout.error = "A senha é obrigatória."
+            amountOfErrors++
+        } else {
+            passwordLayout.error = null
+        }
+
+        return amountOfErrors == 0
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }
