@@ -1,171 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:backgroundTint="#000">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:orientation="vertical">
-
-            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="20dp"
-                android:text="MarketDeal"
-                android:textAlignment="center"
-                android:textColor="@color/primary"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray_2" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="40dp"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:lineHeight="28sp"
-                    android:text="Adicionar mercado"
-                    android:textColor="@color/gray_12"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="top"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
 
-                <EditText
-                    android:id="@+id/market_name"
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Nome do estabelicimento"
-                    android:inputType="textCapWords"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
-                <EditText
-                    android:id="@+id/cep_market"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="CEP"
-                    android:inputType="number"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp"
-                    android:maxLength="8"/>
-                <EditText
-                    android:id="@+id/number_market"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Número do logradouro"
-                    android:inputType="number"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp"
-                    android:maxLength="4"/>
+                    android:layout_gravity="top"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/street_market"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Rua"
-                    android:inputType="text"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp"
-                    android:enabled="false" />
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="20dp"
+                        android:text="MarketDeal"
+                        android:textAlignment="center"
+                        android:textColor="@color/primary"
+                        android:textSize="24sp"
+                        android:textStyle="bold"/>
 
-                <EditText
-                    android:id="@+id/nbr_market"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Bairro"
-                    android:inputType="text"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp"
-                    android:enabled="false" />
-                <EditText
-                    android:id="@+id/city_market"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Cidade"
-                    android:inputType="text"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp"
-                    android:enabled="false" />
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_2"/>
+            </LinearLayout>
 
-                <Button
-                    android:id="@+id/market_register_btn"
+
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/primary"
-                    android:lineHeight="24sp"
-                    android:paddingVertical="12dp"
-                    android:text="Registrar estabelicmento"
-                    android:textAllCaps="false"
-                    android:textSize="16sp"
-                    android:layout_gravity="bottom" />
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="40dp"
+                    android:orientation="vertical">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:lineHeight="28sp"
+                            android:text="Adicionar mercado"
+                            android:textColor="@color/gray_12"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="top"
+                        android:orientation="vertical"
+                        >
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/activity_form_market_name_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Nome do Estabelecimento*"
+                            android:layout_marginBottom="8dp"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:errorEnabled="true"
+                            app:errorTextColor="@color/destructive"
+                            app:endIconMode="clear_text"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/activity_form_market_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/gray_12"
+                                android:maxLength="64"
+                                android:inputType="textCapWords"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/activity_form_market_cep_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="CEP*"
+                            android:layout_marginBottom="8dp"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:errorEnabled="true"
+                            app:errorTextColor="@color/destructive"
+                            app:endIconMode="clear_text"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/activity_form_market_cep"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/gray_12"
+                                android:maxLength="8"
+                                android:inputType="number"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/activity_form_market_number_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Número do logradouro*"
+                            android:layout_marginBottom="8dp"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:errorEnabled="true"
+                            app:errorTextColor="@color/destructive"
+                            app:endIconMode="clear_text"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/activity_form_market_number"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/gray_12"
+                                android:maxLength="4"
+                                android:inputType="number"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/activity_form_market_street_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Rua*"
+                            android:layout_marginBottom="8dp"
+                            android:enabled="false"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:errorEnabled="true"
+                            app:errorTextColor="@color/destructive"
+                            app:endIconMode="clear_text"
+                            >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/activity_form_market_street"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/gray_12"
+                                android:inputType="text"
+                                />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/activity_form_market_nbr_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Bairro*"
+                            android:layout_marginBottom="8dp"
+                            android:enabled="false"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:errorEnabled="true"
+                            app:errorTextColor="@color/destructive"
+                            app:endIconMode="clear_text"
+                            >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/activity_form_market_nbr"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/gray_12"
+                                android:inputType="text"
+                                />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/activity_form_market_city_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Cidade*"
+                            android:layout_marginBottom="8dp"
+                            android:enabled="false"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:errorEnabled="true"
+                            app:errorTextColor="@color/destructive"
+                            app:endIconMode="clear_text"
+                            >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/activity_form_market_city"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/gray_12"
+                                android:inputType="text"
+                                />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                            android:id="@+id/activity_form_market_register_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/primary"
+                            android:lineHeight="24sp"
+                            android:paddingVertical="12dp"
+                            android:text="Registrar estabelecimento"
+                            android:textAllCaps="false"
+                            android:textSize="16sp"
+                            android:layout_gravity="bottom"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

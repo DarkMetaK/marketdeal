@@ -1,8 +1,7 @@
-package br.com.marketdeal.model
+package br.com.marketdeal.utils
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
@@ -13,7 +12,8 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class Cep {
+class CepSearcher {
+
     var cep: String? = null
     var logradouro: String? = null
     var bairro: String? = null
@@ -54,4 +54,5 @@ class Cep {
         uf = jsonObject["uf"]?.jsonPrimitive?.contentOrNull
         ddd = jsonObject["ddd"]?.jsonPrimitive?.contentOrNull
     }
+
 }

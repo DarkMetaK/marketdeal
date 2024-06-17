@@ -19,7 +19,7 @@
         android:label="ProfileFragment" />
     <fragment
         android:id="@+id/mi_store"
-        android:name="br.com.marketdeal.ui.fragment.StoreFragment"
+        android:name="br.com.marketdeal.ui.fragment.MarketFragment"
         android:label="StoreFragment" />
     <fragment
         android:id="@+id/mi_product"

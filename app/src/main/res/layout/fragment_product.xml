@@ -38,7 +38,8 @@
             android:layout_marginBottom="20dp"
             android:text="Produtos"
             android:textColor="@color/gray_12"
-            android:textSize="16sp"/>
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
     <ListView
             android:id="@+id/fragment_product_list"
