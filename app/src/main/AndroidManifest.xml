@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MarketDeal"
         tools:targetApi="31">
+
         <activity
             android:name="br.com.marketdeal.ui.activity.LoadingActivity"
             android:exported="true">
@@ -23,6 +24,7 @@
         <activity android:name="br.com.marketdeal.ui.activity.SignInActivity" />
         <activity android:name="br.com.marketdeal.ui.activity.SignUpActivity" />
         <activity android:name="br.com.marketdeal.ui.activity.MainActivity" />
+        <activity android:name="br.com.marketdeal.ui.activity.MarketFormActivity" />
         <activity android:name="br.com.marketdeal.ui.activity.OfferActivity" />
         <activity android:name=".ui.activity.ProductFormActivity" />
     </application>
