@@ -6,15 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import br.com.marketdeal.R
 import br.com.marketdeal.dto.MarketSpinnerDTO
 import br.com.marketdeal.dto.ProductSpinnerDTO
 import br.com.marketdeal.model.Offer
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,18 +30,30 @@ class OfferFragment : Fragment() {
     private val database by lazy { Firebase.database.reference }
     private val auth by lazy { Firebase.auth }
 
-    private lateinit var size: EditText
-    private lateinit var originalPrice: EditText
-    private lateinit var currentPrice: EditText
-    private lateinit var observations: EditText
+    private val navController by lazy { requireActivity().findNavController(R.id.activity_main_container) }
+    private lateinit var offer: Offer
+    private var offerIsBeingEdited = false
+
+    private lateinit var sizeLayout: TextInputLayout
+    private lateinit var size: TextInputEditText
+
+    private lateinit var originalPriceLayout: TextInputLayout
+    private lateinit var originalPrice: TextInputEditText
+
+    private lateinit var currentPriceLayout: TextInputLayout
+    private lateinit var currentPrice: TextInputEditText
+
+    private lateinit var observations: TextInputEditText
     private lateinit var submitBtn: Button
 
-    private lateinit var productSpinner: Spinner
+    private lateinit var productAutocompleteLayout: TextInputLayout
+    private lateinit var productAutocomplete: AutoCompleteTextView
     private lateinit var productAutoCompleteAdapter: ArrayAdapter<String>
+    private var selectedProduct: ProductSpinnerDTO? = null
     private val productList = ArrayList<ProductSpinnerDTO>()
     private val productListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
-            for (suggestionSnapshot in dataSnapshot.getChildren()) {
+            for (suggestionSnapshot in dataSnapshot.children) {
                 val name = suggestionSnapshot.child("name").getValue(String::class.java)
                 val dto = ProductSpinnerDTO(
                     suggestionSnapshot.key.toString(),
@@ -49,6 +63,18 @@ class OfferFragment : Fragment() {
                 productList.add(dto)
                 productAutoCompleteAdapter.add(name)
             }
+
+            productAutoCompleteAdapter.filter.filter("")
+
+            if (offerIsBeingEdited) {
+                val product = productList.find { dto -> dto.id == offer.productId }
+
+                if (product != null) {
+                    val dto = ProductSpinnerDTO(product.id, product.name)
+                    selectedProduct = dto
+                    productAutocomplete.setText(dto.toString(), false)
+                }
+            }
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
@@ -56,12 +82,14 @@ class OfferFragment : Fragment() {
         }
     }
 
-    private lateinit var marketSpinner: Spinner
+    private lateinit var marketAutocompleteLayout: TextInputLayout
+    private lateinit var marketAutocomplete: AutoCompleteTextView
     private lateinit var marketAutoCompleteAdapter: ArrayAdapter<String>
+    private var selectedMarket: MarketSpinnerDTO? = null
     private val marketList = ArrayList<MarketSpinnerDTO>()
     private val marketListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
-            for (suggestionSnapshot in dataSnapshot.getChildren()) {
+            for (suggestionSnapshot in dataSnapshot.children) {
                 val name = suggestionSnapshot.child("name").getValue(String::class.java)
                 val dto = MarketSpinnerDTO(
                     suggestionSnapshot.key.toString(),
@@ -70,6 +98,18 @@ class OfferFragment : Fragment() {
 
                 marketList.add(dto)
                 marketAutoCompleteAdapter.add(name)
+            }
+
+            marketAutoCompleteAdapter.filter.filter("")
+
+            if (offerIsBeingEdited) {
+                val market = marketList.find { dto -> dto.id == offer.marketId }
+
+                if (market != null) {
+                    val dto = MarketSpinnerDTO(market.id, market.name)
+                    selectedMarket = dto
+                    marketAutocomplete.setText(dto.toString(), false)
+                }
             }
         }
 
@@ -83,74 +123,179 @@ class OfferFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater!!.inflate(R.layout.fragment_offer, container, false)
+        val view = inflater.inflate(R.layout.fragment_offer, container, false)
 
         initializeFields(view)
+        verifyIfOfferIsBeingEdited()
+
         configSubmitBtn()
         configProductAutoComplete(view)
         configMarketAutoComplete(view)
+
         database.child("products").addValueEventListener(productListener)
         database.child("markets").addValueEventListener(marketListener)
 
         return view
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        resetErrors()
+
+        if (offerIsBeingEdited) {
+            resetForm()
+            offerIsBeingEdited = false
+            activity?.intent?.removeExtra("offer")
+        }
+    }
+
     private fun initializeFields(view: View) {
+        sizeLayout = view.findViewById(R.id.fragment_offer_size_layout)
         size = view.findViewById(R.id.fragment_offer_size)
+
+        originalPriceLayout = view.findViewById(R.id.fragment_offer_original_price_layout)
         originalPrice = view.findViewById(R.id.fragment_offer_original_price)
+
+        currentPriceLayout = view.findViewById(R.id.fragment_offer_current_price_layout)
         currentPrice = view.findViewById(R.id.fragment_offer_current_price)
+
         observations = view.findViewById(R.id.fragment_offer_observations)
         submitBtn = view.findViewById(R.id.fragment_offer_submit_btn)
     }
 
+    private fun verifyIfOfferIsBeingEdited() {
+        val intentOffer = activity?.intent?.extras?.getSerializable("offer") as Offer?
+
+        if (intentOffer != null) {
+            size.setText(intentOffer.size)
+            originalPrice.setText(intentOffer.originalPrice.toString())
+            currentPrice.setText(intentOffer.currentPrice.toString())
+            observations.setText(intentOffer.observations)
+
+            submitBtn.text = "Editar Oferta"
+            offer = intentOffer
+            offerIsBeingEdited = true
+        }
+    }
+
+    private fun configProductAutoComplete(view: View) {
+        productAutoCompleteAdapter = ArrayAdapter(
+            view.context,
+            R.layout.item_autocomplete
+        )
+
+        productAutocompleteLayout = view.findViewById(R.id.fragment_offer_product_layout)
+        productAutocomplete = view.findViewById(R.id.fragment_offer_product)
+        productAutocomplete.setAdapter(productAutoCompleteAdapter)
+        productAutocomplete.setOnItemClickListener { _, _, position, _ ->
+            selectedProduct = productList[position]
+        }
+    }
+
+    private fun configMarketAutoComplete(view: View) {
+        marketAutoCompleteAdapter = ArrayAdapter(
+            view.context,
+            R.layout.item_autocomplete
+        )
+
+        marketAutocompleteLayout = view.findViewById(R.id.fragment_offer_market_layout)
+        marketAutocomplete = view.findViewById(R.id.fragment_offer_market)
+        marketAutocomplete.setAdapter(marketAutoCompleteAdapter)
+        marketAutocomplete.setOnItemClickListener { _, _, position, _ ->
+            selectedMarket = marketList[position]
+        }
+    }
+
     private fun configSubmitBtn() {
         submitBtn.setOnClickListener {
-            val offer = createOffer()
+            val offerWasCreated = createOfferModel()
 
-            if (offer != null) {
-                database.child("offers").child(offer.id).setValue(offer)
-                    .addOnSuccessListener {
-                        Toast.makeText(
-                            requireActivity(),
-                            "Oferta anunciada com sucesso!",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        cleanFields()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            requireActivity(),
-                            "Falha ao anunciar oferta, por favor tente novamente!",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                    }
+            if (offerWasCreated) {
+                if (offerIsBeingEdited) {
+                    updateOffer()
+                } else {
+                    addNewOffer()
+                }
             }
         }
     }
 
-    private fun createOffer(): Offer? {
+    private fun addNewOffer() {
+        database.child("offers").child(offer.uid).setValue(offer)
+            .addOnSuccessListener {
+                Toast.makeText(
+                    requireActivity(),
+                    "Oferta anunciada com sucesso!",
+                    Toast.LENGTH_SHORT,
+                ).show()
+                cleanFields()
+            }
+            .addOnFailureListener {
+                Toast.makeText(
+                    requireActivity(),
+                    "Falha ao anunciar oferta, por favor tente novamente!",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+    }
+
+    private fun updateOffer() {
+        val offerValues = offer.toMap()
+
+        val childUpdates = hashMapOf<String, Any>(
+            "/${offer.uid}" to offerValues,
+        )
+
+        database.child("offers").updateChildren(childUpdates)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Oferta atualizada com sucesso!",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+
+                    cleanFields()
+                    navController.navigate(R.id.mi_home)
+                } else {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Falha ao atualizar os dados, por favor tente novamente.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+    }
+
+    private fun createOfferModel(): Boolean {
+        if (!validateFields()) {
+            Toast.makeText(
+                requireActivity(),
+                "Preencha todos os campos obrigatórios.",
+                Toast.LENGTH_SHORT,
+            ).show()
+
+            return false
+        }
+
+        var offerId = UUID.randomUUID().toString()
         val sizeStr = size.text.toString()
         val originalPriceStr = originalPrice.text.toString()
         val currentPriceStr = currentPrice.text.toString()
         val observationsStr = observations.text.toString()
-        val marketId = marketList[marketSpinner.selectedItemId.toInt()].id
-        val marketName = marketList[marketSpinner.selectedItemId.toInt()].name
-        val productId = productList[productSpinner.selectedItemId.toInt()].id
-        val productName = productList[productSpinner.selectedItemId.toInt()].name
         val userId = auth.currentUser!!.uid
+        val marketId = selectedMarket!!.id
+        val marketName = selectedMarket!!.name
+        val productId = selectedProduct!!.id
+        val productName = selectedProduct!!.name
 
-        if (sizeStr.isEmpty() || originalPriceStr.isEmpty() || currentPriceStr.isEmpty() || marketId.isEmpty() || productId.isEmpty()) {
-            Toast.makeText(
-                requireActivity(),
-                "Preencha todos os campos",
-                Toast.LENGTH_SHORT,
-            ).show()
-
-            return null
+        if (offerIsBeingEdited) {
+            offerId = offer.uid
         }
 
-        return Offer(
-            UUID.randomUUID().toString(),
+        offer = Offer(
+            offerId,
             sizeStr,
             originalPriceStr.toDouble(),
             currentPriceStr.toDouble(),
@@ -162,32 +307,85 @@ class OfferFragment : Fragment() {
             productName,
             userId
         )
+
+        return true
+    }
+
+    private fun validateFields(): Boolean {
+        var amountOfErrors = 0
+        val sizeStr = size.text.toString()
+        val originalPriceStr = originalPrice.text.toString()
+        val currentPriceStr = currentPrice.text.toString()
+
+        if (selectedProduct == null) {
+            productAutocompleteLayout.error = "O produto é obrigatório."
+            amountOfErrors++
+        } else {
+            productAutocompleteLayout.error = null
+        }
+
+        if (selectedMarket == null) {
+            marketAutocompleteLayout.error = "O mercado é obrigatório."
+            amountOfErrors++
+        } else {
+            marketAutocompleteLayout.error = null
+        }
+
+        if (sizeStr.isEmpty()) {
+            sizeLayout.error = "O tamanho é obrigatório."
+            amountOfErrors++
+        } else {
+            sizeLayout.error = null
+        }
+
+        if (originalPriceStr.isEmpty()) {
+            originalPriceLayout.error = "O preço original é obrigatório."
+            amountOfErrors++
+        } else {
+            originalPriceLayout.error = null
+        }
+
+        if (currentPriceStr.isEmpty()) {
+            currentPriceLayout.error = "O preço atual é obrigatório."
+            amountOfErrors++
+        } else {
+            currentPriceLayout.error = null
+        }
+
+        if (originalPriceStr.isNotEmpty() && currentPriceStr.isNotEmpty()) {
+            if (currentPriceStr.toDouble() >= originalPriceStr.toDouble()) {
+                currentPriceLayout.error = "O preço atual não poder ser maior/igual ao preço original."
+                amountOfErrors++
+            } else {
+                currentPriceLayout.error = null
+            }
+        }
+
+        return amountOfErrors == 0
     }
 
     private fun cleanFields() {
+        productAutocomplete.setText(null, false)
+        marketAutocomplete.setText(null, false)
+        selectedProduct = null
+        selectedMarket = null
+
         size.setText("")
         originalPrice.setText("")
         currentPrice.setText("")
         observations.setText("")
     }
 
-    private fun configProductAutoComplete(view: View) {
-        productAutoCompleteAdapter = ArrayAdapter(
-            view.context,
-            android.R.layout.simple_list_item_1
-        )
-
-        productSpinner = view.findViewById(R.id.fragment_offer_product)
-        productSpinner.adapter = productAutoCompleteAdapter
+    private fun resetErrors() {
+        productAutocompleteLayout.error = null
+        marketAutocompleteLayout.error = null
+        sizeLayout.error = null
+        originalPriceLayout.error = null
+        currentPriceLayout.error = null
     }
 
-    private fun configMarketAutoComplete(view: View) {
-        marketAutoCompleteAdapter = ArrayAdapter(
-            view.context,
-            android.R.layout.simple_list_item_1
-        )
-        marketSpinner = view.findViewById(R.id.fragment_offer_market)
-        marketSpinner.adapter = marketAutoCompleteAdapter
+    private fun resetForm() {
+        cleanFields()
+        submitBtn.text = "Anunciar Oferta"
     }
-
 }

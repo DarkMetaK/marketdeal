@@ -1,18 +1,21 @@
 package br.com.marketdeal.model
 
 import com.google.firebase.database.Exclude
+import java.io.Serializable
 
 data class Product(
-    var id: Long = 0,
+    var uid: String = "",
+    var imageUrl: String? = "",
     var name: String = "",
     var description: String = "",
     var producer: String = "",
-) {
+): Serializable {
 
     @Exclude
     fun toMap(): Map<String, Any?> {
         return mapOf(
-            "uid" to id,
+            "uid" to uid,
+            "imageUrl" to imageUrl,
             "name" to name,
             "description" to description,
             "producer" to producer,

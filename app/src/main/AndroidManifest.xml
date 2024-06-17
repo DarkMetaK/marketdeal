@@ -25,6 +25,8 @@
         <activity android:name="br.com.marketdeal.ui.activity.SignUpActivity" />
         <activity android:name="br.com.marketdeal.ui.activity.MainActivity" />
         <activity android:name="br.com.marketdeal.ui.activity.MarketFormActivity" />
+        <activity android:name="br.com.marketdeal.ui.activity.OfferActivity" />
+        <activity android:name=".ui.activity.ProductFormActivity" />
     </application>
 
 </manifest>

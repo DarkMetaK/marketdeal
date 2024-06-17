@@ -13,4 +13,18 @@
         <item name="android:statusBarColor">@color/primary</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <!-- Image border radius -->
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <!-- Material Input style
+    <style name="inputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="colorAccent">@color/primary</item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>-->
+
 </resources>

@@ -17,6 +17,7 @@ data class Market(
         return mapOf(
             "uid" to id,
             "name" to name,
+            "address" to address,
         )
     }
 
