@@ -5,17 +5,18 @@ import java.io.Serializable
 import java.time.LocalDate
 
 data class Offer(
-    val uid: String = "",
-    val size: String = "",
-    val originalPrice: Double = 0.0,
-    val currentPrice: Double = 0.0,
-    val observations: String = "",
-    val createdAt: String = LocalDate.now().toString(),
-    val marketId: String = "",
-    val marketName: String = "",
-    val productId: String = "",
-    val productName: String = "",
-    val userId: String = "",
+    var uid: String = "",
+    var size: String = "",
+    var originalPrice: Double = 0.0,
+    var currentPrice: Double = 0.0,
+    var observations: String = "",
+    var createdAt: String = LocalDate.now().toString(),
+    var marketId: String = "",
+    var marketName: String = "",
+    var productId: String = "",
+    var productName: String = "",
+    var imageUrl: String? = "",
+    var userId: String = "",
 ) : Serializable {
 
     @Exclude
@@ -31,6 +32,7 @@ data class Offer(
             "marketName" to marketName,
             "productId" to productId,
             "productName" to productName,
+            "imageUrl" to imageUrl,
             "userId" to userId,
         )
     }
