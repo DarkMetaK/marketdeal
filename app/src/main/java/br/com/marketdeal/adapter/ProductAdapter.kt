@@ -15,6 +15,20 @@ import com.google.android.material.imageview.ShapeableImageView
 class ProductAdapter(private val context: Context) : BaseAdapter() {
     private val products = ArrayList<Product>()
 
+    private fun addAll(items: List<Product>) {
+        products.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun update(items: List<Product>) {
+        clear()
+        addAll(items)
+    }
+
+    private fun clear() {
+        products.clear()
+    }
+
     override fun getCount(): Int {
         return products.size
     }
@@ -30,7 +44,7 @@ class ProductAdapter(private val context: Context) : BaseAdapter() {
     override fun getView(position: Int, view: View?, viewGroup: ViewGroup?): View {
         val createdView = LayoutInflater
             .from(context)
-            .inflate(R.layout.product_item, viewGroup, false)
+            .inflate(R.layout.item_product, viewGroup, false)
 
         val product = products[position]
 
@@ -53,23 +67,4 @@ class ProductAdapter(private val context: Context) : BaseAdapter() {
         return createdView
     }
 
-
-    fun update(items: List<Product>) {
-        clear()
-        addAll(items)
-    }
-
-    fun remove(item: Product) {
-        products.remove(item)
-        notifyDataSetChanged()
-    }
-
-    private fun clear() {
-        products.clear()
-    }
-
-    private fun addAll(items: List<Product>) {
-        products.addAll(items)
-        notifyDataSetChanged()
-    }
 }

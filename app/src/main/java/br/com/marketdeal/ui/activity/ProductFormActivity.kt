@@ -137,19 +137,7 @@ class ProductFormActivity : AppCompatActivity() {
         val producerStr = producer.text.toString()
         val descriptionStr = description.text.toString()
 
-        if (nameStr.isEmpty()) {
-            nameLayout.error = "O nome é obrigatório."
-        } else {
-            nameLayout.error = null
-        }
-
-        if (producerStr.isEmpty()) {
-            producerLayout.error = "A marca é obrigatória."
-        } else {
-            producerLayout.error = null
-        }
-
-        if (nameStr.isEmpty() || producerStr.isEmpty()) {
+        if (!validateFields()) {
             showToast("Preencha todos os campos obrigatórios.")
             callback(false)
             return
@@ -202,6 +190,28 @@ class ProductFormActivity : AppCompatActivity() {
                 showToast("Falha ao carregar a foto!")
                 callback(false)
             }
+    }
+
+    private fun validateFields(): Boolean {
+        var amountOfErrors = 0
+        val nameStr = name.text.toString()
+        val producerStr = producer.text.toString()
+
+        if (nameStr.isEmpty()) {
+            nameLayout.error = "O nome é obrigatório."
+            amountOfErrors++
+        } else {
+            nameLayout.error = null
+        }
+
+        if (producerStr.isEmpty()) {
+            producerLayout.error = "A marca é obrigatória."
+            amountOfErrors++
+        } else {
+            producerLayout.error = null
+        }
+
+        return amountOfErrors == 0
     }
 
     private fun cleanFields() {

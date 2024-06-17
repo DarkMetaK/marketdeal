@@ -1,151 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
+            android:layout_height="match_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:fillViewport="true">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="20dp"
-                android:text="MarketDeal"
-                android:textAlignment="center"
-                android:textColor="@color/primary"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_gravity="top"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="20dp"
+                    android:text="MarketDeal"
+                    android:textAlignment="center"
+                    android:textColor="@color/primary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray_2" />
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_2"/>
         </LinearLayout>
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="40dp"
-            android:orientation="vertical">
-
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineHeight="28sp"
-                android:text="Anunciar Oferta"
-                android:textColor="@color/gray_12"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="40dp"
+                android:orientation="vertical">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineHeight="28sp"
+                    android:text="Anunciar Oferta"
+                    android:textColor="@color/gray_12"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
 
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Spinner
-                    android:id="@+id/fragment_offer_market"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Mercado"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                <Spinner
-                    android:id="@+id/fragment_offer_product"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Produto*"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/fragment_offer_product_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Produto*"
+                        android:layout_marginBottom="8dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:errorEnabled="true"
+                        app:errorTextColor="@color/destructive"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        >
 
-                <EditText
-                    android:id="@+id/fragment_offer_size"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Tamanho / Peso*"
-                    android:inputType="text"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                    <AutoCompleteTextView
+                            android:id="@+id/fragment_offer_product"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_12"
+                            android:inputType="none"
+                            tools:ignore="LabelFor"/>
 
-                <EditText
-                    android:id="@+id/fragment_offer_original_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Preço original*"
-                    android:inputType="numberDecimal"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/fragment_offer_current_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:hint="Preço com desconto*"
-                    android:inputType="numberDecimal"
-                    android:lineHeight="24sp"
-                    android:minHeight="48dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/fragment_offer_market_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Mercado*"
+                        android:layout_marginBottom="8dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:errorEnabled="true"
+                        app:errorTextColor="@color/destructive"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        >
 
-                <EditText
-                    android:id="@+id/fragment_offer_observations"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/custom_input"
-                    android:gravity="top"
-                    android:hint="Observações"
-                    android:inputType="text|textMultiLine"
-                    android:lineHeight="24sp"
-                    android:minHeight="96dp"
-                    android:padding="12dp"
-                    android:textColorHint="@color/gray_7"
-                    android:textSize="16sp" />
+                    <AutoCompleteTextView
+                            android:id="@+id/fragment_offer_market"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_12"
+                            android:inputType="none"
+                            tools:ignore="LabelFor"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/fragment_offer_size_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tamanho/Peso*"
+                        android:layout_marginBottom="8dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:errorEnabled="true"
+                        app:errorTextColor="@color/destructive"
+                        app:endIconMode="clear_text"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_offer_size"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_12"
+                            android:maxLength="64"
+                            android:inputType="text"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/fragment_offer_original_price_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Preço original*"
+                        android:layout_marginBottom="8dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:errorEnabled="true"
+                        app:errorTextColor="@color/destructive"
+                        app:endIconMode="clear_text"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_offer_original_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_12"
+                            android:inputType="numberDecimal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/fragment_offer_current_price_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Preço com desconto*"
+                        android:layout_marginBottom="8dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:errorEnabled="true"
+                        app:errorTextColor="@color/destructive"
+                        app:endIconMode="clear_text"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_offer_current_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_12"
+                            android:inputType="numberDecimal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Observações"
+                        android:layout_marginBottom="20dp"
+                        app:boxBackgroundColor="@android:color/transparent"
+                        app:endIconMode="clear_text"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_offer_observations"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/gray_12"
+                            android:maxLength="240"
+                            android:inputType="text|textMultiLine"
+                            android:gravity="top"
+                            android:minHeight="96dp"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
-                    android:id="@+id/fragment_offer_submit_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:backgroundTint="@color/primary"
-                    android:lineHeight="24sp"
-                    android:paddingVertical="12dp"
-                    android:text="Anunciar Oferta"
-                    android:textAllCaps="false"
-                    android:textSize="16sp" />
+                        android:id="@+id/fragment_offer_submit_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/primary"
+                        android:lineHeight="24sp"
+                        android:paddingVertical="12dp"
+                        android:text="Anunciar Oferta"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"/>
 
             </LinearLayout>
 
