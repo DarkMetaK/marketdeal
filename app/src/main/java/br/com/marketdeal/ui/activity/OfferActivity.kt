@@ -1,5 +1,6 @@
 package br.com.marketdeal.ui.activity
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,14 +10,17 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import br.com.marketdeal.R
-import br.com.marketdeal.model.Market
-import br.com.marketdeal.model.Offer
-import br.com.marketdeal.utils.ImageLoader
+
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+
+import br.com.marketdeal.R
+import br.com.marketdeal.model.Market
+import br.com.marketdeal.model.Offer
+import br.com.marketdeal.utils.CurrencyConverter
+import br.com.marketdeal.utils.ImageLoader
 
 class OfferActivity : AppCompatActivity() {
     private val database by lazy { Firebase.database.reference }
@@ -32,7 +36,8 @@ class OfferActivity : AppCompatActivity() {
     private val observations by lazy { findViewById<TextView>(R.id.activity_offer_observations) }
 
     private val marketName by lazy { findViewById<TextView>(R.id.activity_offer_market_name) }
-    private val marketAddress by lazy { findViewById<TextView>(R.id.activity_offer_market_address) }
+    private val marketStreetAndNumber by lazy { findViewById<TextView>(R.id.activity_offer_market_streetAndNumber) }
+    private val marketNeighborhoodAndCity by lazy { findViewById<TextView>(R.id.activity_offer_market_neighborhoodAndCity) }
 
     private val deleteBtn by lazy { findViewById<Button>(R.id.activity_offer_delete_btn) }
     private val editBtn by lazy { findViewById<Button>(R.id.activity_offer_edit_btn) }
@@ -78,7 +83,8 @@ class OfferActivity : AppCompatActivity() {
 
             if (market != null) {
                 marketName.text = market.name
-                marketAddress.text = market.street
+                marketStreetAndNumber.text = market.street + ", N°: " + market.number
+                marketNeighborhoodAndCity.text = market.neighborhood + ", " + market.city
             }
         }.addOnFailureListener {
             Log.e("firebase", "Error getting market data", it)
@@ -89,26 +95,18 @@ class OfferActivity : AppCompatActivity() {
         title.text = offer.productName
         date.text = offer.createdAt
         size.text = offer.size
-        originalPrice.text = "R$ " + offer.originalPrice.toString()
-        currentPrice.text = "R$ " + offer.currentPrice.toString()
+        originalPrice.text = CurrencyConverter.convertToReal(offer.originalPrice)
+        currentPrice.text = CurrencyConverter.convertToReal(offer.currentPrice)
         observations.text = offer.observations
-    }
-
-    private fun deleteOffer() {
-        database.child("offers").child(offer.uid).removeValue()
-        Toast.makeText(
-            this,
-            "Oferta deletada com sucesso!",
-            Toast.LENGTH_SHORT,
-        ).show()
-
-        finish()
     }
 
     private fun configDeleteButton() {
         if (userId != null && offer.userId == userId) {
             deleteBtn.setOnClickListener {
-                deleteOffer()
+                it.isEnabled = false
+                it.isClickable = false
+
+                deleteDialog()
             }
         } else {
             deleteBtn.visibility = View.GONE
@@ -127,6 +125,46 @@ class OfferActivity : AppCompatActivity() {
         } else {
             editBtn.visibility = View.GONE
         }
+    }
+
+    private fun deleteDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setMessage("Deseja realmente apagar esse produto?")
+            .setTitle("Excluir Produto")
+            .setPositiveButton("Confirmar") { _, _ ->
+                deleteOffer { offerWasSuccessfullyDeleted ->
+                    if (offerWasSuccessfullyDeleted) {
+                        finish()
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar") { _, _ -> }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        enableDeleteButton()
+    }
+
+    private fun deleteOffer(callback: (Boolean) -> Unit) {
+        database.child("offers").child(offer.uid).removeValue()
+            .addOnSuccessListener {
+                showToast("Oferta deletada com sucesso!")
+                callback(true)
+            }
+            .addOnFailureListener {
+                showToast("Falha ao deletar a oferta")
+                callback(false)
+            }
+    }
+
+    private fun enableDeleteButton() {
+        deleteBtn.isEnabled = true
+        deleteBtn.isClickable = true
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 }
