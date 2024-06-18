@@ -80,7 +80,6 @@ class MarketUpdateActivity: AppCompatActivity() {
         number.setText(market.number)
         neighborhood.setText(market.neighborhood)
         city.setText(market.city)
-        // Add code to set cep if you have it in the Market model
     }
 
     private fun buscarCep(numCep: String) {

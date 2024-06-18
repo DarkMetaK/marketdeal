@@ -4,6 +4,7 @@ import com.google.firebase.database.Exclude
 
 data class Market(
     var uid: String = "",
+    var imageUrl: String? = "",
     var name: String = "",
     var city: String = "",
     var neighborhood: String = "",
@@ -19,6 +20,7 @@ data class Market(
             "city" to city,
             "neighborhood" to neighborhood,
             "street" to street,
+            "imageUrl" to imageUrl,
             "number" to number,
         )
     }
