@@ -25,6 +25,8 @@ import com.google.firebase.storage.ktx.storage
 import br.com.marketdeal.R
 import br.com.marketdeal.model.Product
 import br.com.marketdeal.utils.ImageLoader
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 
 class ProductFormActivity : AppCompatActivity() {
     private val database by lazy { Firebase.database.reference }
@@ -255,9 +257,36 @@ class ProductFormActivity : AppCompatActivity() {
     }
 
     private fun deleteProduct(callback: (Boolean) -> Unit) {
-        database.child("products").child(product.uid).removeValue()
+        val productId = product.uid
+
+        database.child("offers").orderByChild("productId").equalTo(productId).get()
+            .addOnSuccessListener { snapshot ->
+                val offersToDelete = mutableListOf<Task<Void>>()
+                for (offerSnapshot in snapshot.children) {
+                    val offerId = offerSnapshot.key
+                    offerId?.let {
+                        offersToDelete.add(database.child("offers").child(it).removeValue())
+                    }
+                }
+                Tasks.whenAll(offersToDelete)
+                    .addOnSuccessListener {
+                        deleteProductData(productId, callback)
+                    }
+                    .addOnFailureListener {
+                        showToast("Falha ao deletar ofertas associadas. Operação cancelada.")
+                        callback(false)
+                    }
+            }
+            .addOnFailureListener {
+                showToast("Falha ao buscar ofertas associadas. Operação cancelada.")
+                callback(false)
+            }
+    }
+
+    private fun deleteProductData(productId: String, callback: (Boolean) -> Unit) {
+        database.child("products").child(productId).removeValue()
             .addOnSuccessListener {
-                deleteImage(product.uid)
+                deleteImage(productId)
                 showToast("Produto deletado com sucesso!")
                 callback(true)
             }
