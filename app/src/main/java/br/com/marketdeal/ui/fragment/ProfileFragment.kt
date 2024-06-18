@@ -29,11 +29,12 @@ import br.com.marketdeal.R
 import br.com.marketdeal.model.User
 import br.com.marketdeal.ui.activity.SignInActivity
 import br.com.marketdeal.utils.MaskWatcher
+import com.google.android.gms.tasks.Task
 
 class ProfileFragment : Fragment() {
     private val authUser by lazy { Firebase.auth.currentUser }
-    private val database by lazy { Firebase.database.getReference("users") }
-    private val userTableRef by lazy { authUser?.uid?.let { database.child(it) } }
+    private val database by lazy { Firebase.database.reference }
+    private val userTableRef by lazy { authUser?.uid?.let { database.child("users").child(it) } }
     private val userListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val user = dataSnapshot.getValue<User>()
@@ -175,7 +176,7 @@ class ProfileFragment : Fragment() {
 
                             if (allSuccessful) {
                                 // Update the user model in the database
-                                database.child(authUser!!.uid).setValue(user)
+                                database.child("users").child(authUser!!.uid).setValue(user)
                                     .addOnSuccessListener {
                                         showToast("Perfil atualizado com sucesso!")
                                     }
@@ -203,7 +204,7 @@ class ProfileFragment : Fragment() {
                 }
         } else {
             // No email or password update needed, just update the user model in the database
-            database.child(authUser!!.uid).setValue(user)
+            database.child("users").child(authUser!!.uid).setValue(user)
                 .addOnSuccessListener {
                     showToast("Perfil atualizado com sucesso!")
                 }
@@ -274,8 +275,7 @@ class ProfileFragment : Fragment() {
 
     private fun deleteDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-        builder
-            .setMessage("Deseja realmente apagar sua conta?")
+        builder.setMessage("Deseja realmente apagar sua conta?")
             .setTitle("Exclusão de conta")
             .setPositiveButton("Confirmar") { _, _ ->
                 deleteUser { userWasSuccessfullyDeleted ->
@@ -287,24 +287,74 @@ class ProfileFragment : Fragment() {
                 }
             }
             .setNegativeButton("Cancelar") { _, _ -> }
-
         val dialog: AlertDialog = builder.create()
         dialog.show()
         enableDeleteButton()
     }
 
     private fun deleteUser(callback: (Boolean) -> Unit) {
+        val userId = authUser?.uid ?: return callback(false)
+        deleteCascadeOffers(userId) { offersDeleted ->
+            if (offersDeleted) {
+                deleteUserData(userId) { userDeleted ->
+                    if (userDeleted) {
+                        deleteAuthData(callback)
+                    } else {
+                        callback(false)
+                    }
+                }
+            } else {
+                callback(false)
+            }
+        }
+    }
+
+    private fun deleteCascadeOffers(userId: String, callback: (Boolean) -> Unit) {
+        database.child("offers").orderByChild("userId").equalTo(userId).get()
+            .addOnSuccessListener { snapshot ->
+                val offersToDelete = mutableListOf<Task<Void>>()
+                for (offerSnapshot in snapshot.children) {
+                    val offerId = offerSnapshot.key
+                    offerId?.let {
+                        offersToDelete.add(database.child("offers").child(it).removeValue())
+                    }
+                }
+                Tasks.whenAll(offersToDelete)
+                    .addOnSuccessListener {
+                        callback(true)
+                    }
+                    .addOnFailureListener {
+                        showToast("Falha ao deletar ofertas associadas. Operação cancelada.")
+                        callback(false)
+                    }
+            }
+            .addOnFailureListener {
+                showToast("Falha ao buscar ofertas associadas. Operação cancelada.")
+                callback(false)
+            }
+    }
+
+    private fun deleteUserData(userId: String, callback: (Boolean) -> Unit) {
+        database.child("users").child(userId).removeValue()
+            .addOnSuccessListener {
+                callback(true)
+            }
+            .addOnFailureListener {
+                showToast("Falha ao deletar a entidade usuário. Operação cancelada.")
+                callback(false)
+            }
+    }
+
+    private fun deleteAuthData(callback: (Boolean) -> Unit) {
         val user = FirebaseAuth.getInstance().currentUser
         user?.delete()
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    showToast("Perfil deletado com sucesso!")
-                    database.child(authUser!!.uid).removeValue()
-                    callback(true)
-                } else {
-                    showToast("Falha ao remover usuario.")
-                    callback(false)
-                }
+            ?.addOnSuccessListener {
+                showToast("Perfil deletado com sucesso!")
+                callback(true)
+            }
+            ?.addOnFailureListener {
+                showToast("Falha ao deletar usuário.")
+                callback(false)
             }
     }
 
