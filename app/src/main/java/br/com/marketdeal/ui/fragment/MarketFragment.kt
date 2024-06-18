@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import br.com.marketdeal.R
 import br.com.marketdeal.adapter.MarketAdapter
 import br.com.marketdeal.model.Market
+import br.com.marketdeal.ui.activity.MarketActivity
 import br.com.marketdeal.ui.activity.MarketFormActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
@@ -55,7 +56,7 @@ class MarketFragment : Fragment() {
         initializeFields(view)
         initializeAndConfigList(view)
         addMarketBtnConfig()
-
+        configListItemClick()
         database.child("markets").addValueEventListener(marketListener)
 
         return view
@@ -75,6 +76,15 @@ class MarketFragment : Fragment() {
     private fun addMarketBtnConfig() {
         addMarketBtn.setOnClickListener {
             val intent = Intent(requireActivity(), MarketFormActivity::class.java)
+            startActivity(intent)
+        }
+    }
+    private fun configListItemClick() {
+        marketList.setOnItemClickListener { adapterView, view, position, id ->
+            val market = adapterView.getItemAtPosition(position) as Market
+            val intent = Intent(view.context, MarketActivity::class.java)
+            intent.putExtra("id", market.uid)
+            Log.i("market_cruds",market.uid)
             startActivity(intent)
         }
     }
