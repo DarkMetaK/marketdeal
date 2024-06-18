@@ -7,8 +7,8 @@ data class Product(
     var uid: String = "",
     var imageUrl: String? = "",
     var name: String = "",
-    var description: String = "",
     var producer: String = "",
+    var description: String = "",
 ): Serializable {
 
     @Exclude
@@ -17,8 +17,8 @@ data class Product(
             "uid" to uid,
             "imageUrl" to imageUrl,
             "name" to name,
-            "description" to description,
             "producer" to producer,
+            "description" to description,
         )
     }
 

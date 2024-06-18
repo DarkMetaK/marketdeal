@@ -1,5 +1,7 @@
 package br.com.marketdeal.ui.activity
 
+import java.util.UUID
+
 import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
@@ -12,16 +14,17 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
-import br.com.marketdeal.R
-import br.com.marketdeal.model.Product
-import br.com.marketdeal.utils.ImageLoader
+
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.util.UUID
+
+import br.com.marketdeal.R
+import br.com.marketdeal.model.Product
+import br.com.marketdeal.utils.ImageLoader
 
 class ProductFormActivity : AppCompatActivity() {
     private val database by lazy { Firebase.database.reference }
@@ -166,7 +169,7 @@ class ProductFormActivity : AppCompatActivity() {
         }
 
         if (imageUrl != null && (!productIsBeingEdited || product.imageUrl?.toUri() != imageUrl)) {
-            uploadImage { imageUploadSuccess ->
+            uploadImage(productId) { imageUploadSuccess ->
                 if (imageUploadSuccess) {
                     product = Product(
                         productId,
@@ -192,8 +195,8 @@ class ProductFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadImage(callback: (Boolean) -> Unit) {
-        val imgRef = storageRef.child("images/${UUID.randomUUID()}")
+    private fun uploadImage(productId: String, callback: (Boolean) -> Unit) {
+        val imgRef = storageRef.child("images/${productId}")
         imgRef.putFile(imageUrl!!)
             .addOnSuccessListener {
                 imgRef.downloadUrl.addOnSuccessListener { uri ->
@@ -254,6 +257,7 @@ class ProductFormActivity : AppCompatActivity() {
     private fun deleteProduct(callback: (Boolean) -> Unit) {
         database.child("products").child(product.uid).removeValue()
             .addOnSuccessListener {
+                deleteImage(product.uid)
                 showToast("Produto deletado com sucesso!")
                 callback(true)
             }
@@ -261,6 +265,11 @@ class ProductFormActivity : AppCompatActivity() {
                 showToast("Falha ao deletar o produto.")
                 callback(false)
             }
+    }
+
+    private fun deleteImage(productId: String) {
+        val imgRef = storageRef.child("images/${productId}")
+        imgRef.delete()
     }
 
     private fun cleanFields() {
