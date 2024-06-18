@@ -42,6 +42,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
 
     implementation("com.github.bumptech.glide:glide:4.14.2")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
