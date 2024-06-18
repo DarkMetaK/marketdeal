@@ -26,16 +26,13 @@
                     android:layout_marginEnd="20dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/item_market_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:adjustViewBounds="true"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_empty_image"
-                        android:padding="1dp"
-                        app:shapeAppearanceOverlay="@style/roundedImageView"
-                        app:strokeColor="@color/primary"
-                        app:strokeWidth="1dp"/>
+                    android:id="@+id/activity_market_image"
+                    android:layout_width="120dp"
+                    android:layout_height="160dp"
+                    android:layout_marginBottom="20dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_empty_image" />
 
                 <ProgressBar
                         android:id="@+id/item_market_spinner"
