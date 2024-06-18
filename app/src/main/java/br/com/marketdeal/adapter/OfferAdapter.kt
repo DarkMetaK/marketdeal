@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ProgressBar
 import android.widget.TextView
+
+import com.google.android.material.imageview.ShapeableImageView
+
 import br.com.marketdeal.R
 import br.com.marketdeal.model.Offer
+import br.com.marketdeal.utils.CurrencyConverter
 import br.com.marketdeal.utils.ImageLoader
-import com.google.android.material.imageview.ShapeableImageView
 
 class OfferAdapter(private val context: Context) : BaseAdapter() {
     private val offers = ArrayList<Offer>()
@@ -67,8 +70,8 @@ class OfferAdapter(private val context: Context) : BaseAdapter() {
         date.text = offer.createdAt
         size.text = offer.size
         market.text = offer.marketName
-        originalPrice.text = "R$ " + offer.originalPrice
-        currentPrice.text = "R$ " + offer.currentPrice
+        originalPrice.text = CurrencyConverter.convertToReal(offer.originalPrice)
+        currentPrice.text = CurrencyConverter.convertToReal(offer.currentPrice)
 
         return createdView
     }

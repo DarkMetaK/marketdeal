@@ -8,16 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.Fragment
-import br.com.marketdeal.R
-import br.com.marketdeal.adapter.ProductAdapter
-import br.com.marketdeal.model.Product
-import br.com.marketdeal.ui.activity.ProductFormActivity
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+
+import br.com.marketdeal.R
+import br.com.marketdeal.adapter.ProductAdapter
+import br.com.marketdeal.model.Product
+import br.com.marketdeal.ui.activity.ProductFormActivity
 
 class ProductFragment : Fragment() {
     private val database by lazy { Firebase.database.reference }
@@ -81,7 +83,7 @@ class ProductFragment : Fragment() {
     }
 
     private fun configListItemClick() {
-        productList.setOnItemClickListener { adapterView, view, position, id ->
+        productList.setOnItemClickListener { adapterView, view, position, _ ->
             val product = adapterView.getItemAtPosition(position) as Product
             val intent = Intent(view.context, ProductFormActivity::class.java)
             intent.putExtra("product", product)

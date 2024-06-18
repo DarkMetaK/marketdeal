@@ -10,10 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import br.com.marketdeal.R
-import br.com.marketdeal.model.User
-import br.com.marketdeal.ui.activity.SignInActivity
-import br.com.marketdeal.utils.MaskWatcher
+
 import com.google.android.gms.tasks.Tasks
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -27,6 +24,11 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+
+import br.com.marketdeal.R
+import br.com.marketdeal.model.User
+import br.com.marketdeal.ui.activity.SignInActivity
+import br.com.marketdeal.utils.MaskWatcher
 
 class ProfileFragment : Fragment() {
     private val authUser by lazy { Firebase.auth.currentUser }

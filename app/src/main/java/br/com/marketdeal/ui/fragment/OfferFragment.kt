@@ -1,5 +1,8 @@
 package br.com.marketdeal.ui.fragment
 
+import java.time.LocalDate
+import java.util.UUID
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,10 +14,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import br.com.marketdeal.R
-import br.com.marketdeal.dto.MarketSpinnerDTO
-import br.com.marketdeal.dto.ProductSpinnerDTO
-import br.com.marketdeal.model.Offer
+
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
@@ -23,8 +23,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.time.LocalDate
-import java.util.UUID
+
+import br.com.marketdeal.R
+import br.com.marketdeal.dto.MarketSpinnerDTO
+import br.com.marketdeal.dto.ProductSpinnerDTO
+import br.com.marketdeal.model.Offer
 
 class OfferFragment : Fragment() {
     private val database by lazy { Firebase.database.reference }
@@ -117,7 +120,7 @@ class OfferFragment : Fragment() {
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
-            Log.w("firebase", "loadProducts:onCancelled", databaseError.toException())
+            Log.w("firebase", "loadMarkets:onCancelled", databaseError.toException())
         }
     }
 
@@ -212,13 +215,18 @@ class OfferFragment : Fragment() {
 
     private fun configSubmitBtn() {
         submitBtn.setOnClickListener {
-            val offerWasCreated = createOfferModel()
+            it.isEnabled = false
+            it.isClickable = false
 
-            if (offerWasCreated) {
-                if (offerIsBeingEdited) {
-                    updateOffer()
+            createOfferModel { offerWasCreated ->
+                if (offerWasCreated) {
+                    if (offerIsBeingEdited) {
+                        updateOffer()
+                    } else {
+                        addNewOffer()
+                    }
                 } else {
-                    addNewOffer()
+                    enableSubmitButton()
                 }
             }
         }
@@ -227,59 +235,38 @@ class OfferFragment : Fragment() {
     private fun addNewOffer() {
         database.child("offers").child(offer.uid).setValue(offer)
             .addOnSuccessListener {
-                Toast.makeText(
-                    requireActivity(),
-                    "Oferta anunciada com sucesso!",
-                    Toast.LENGTH_SHORT,
-                ).show()
+                showToast("Oferta anunciada com sucesso!")
                 cleanFields()
             }
             .addOnFailureListener {
-                Toast.makeText(
-                    requireActivity(),
-                    "Falha ao anunciar oferta, por favor tente novamente!",
-                    Toast.LENGTH_SHORT,
-                ).show()
+                showToast("Falha ao anunciar oferta, por favor tente novamente!")
+            }
+            .addOnCompleteListener {
+                enableSubmitButton()
             }
     }
 
     private fun updateOffer() {
-        val offerValues = offer.toMap()
+        database.child("offers").child(offer.uid).setValue(offer)
+            .addOnSuccessListener {
+                showToast("Oferta atualizada com sucesso!")
 
-        val childUpdates = hashMapOf<String, Any>(
-            "/${offer.uid}" to offerValues,
-        )
-
-        database.child("offers").updateChildren(childUpdates)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(
-                        requireActivity(),
-                        "Oferta atualizada com sucesso!",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-
-                    cleanFields()
-                    navController.navigate(R.id.mi_home)
-                } else {
-                    Toast.makeText(
-                        requireActivity(),
-                        "Falha ao atualizar os dados, por favor tente novamente.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
+                cleanFields()
+                navController.navigate(R.id.mi_home)
+            }
+            .addOnFailureListener {
+                showToast("Falha ao atualizar os dados, por favor tente novamente.")
+            }
+            .addOnCompleteListener {
+                enableSubmitButton()
             }
     }
 
-    private fun createOfferModel(): Boolean {
+    private fun createOfferModel(callback: (Boolean) -> Unit) {
         if (!validateFields()) {
-            Toast.makeText(
-                requireActivity(),
-                "Preencha todos os campos obrigatórios.",
-                Toast.LENGTH_SHORT,
-            ).show()
-
-            return false
+            showToast("Preencha todos os campos obrigatórios.")
+            callback(false)
+            return
         }
 
         var offerId = UUID.randomUUID().toString()
@@ -313,7 +300,7 @@ class OfferFragment : Fragment() {
             userId
         )
 
-        return true
+        callback(true)
     }
 
     private fun validateFields(): Boolean {
@@ -392,5 +379,14 @@ class OfferFragment : Fragment() {
     private fun resetForm() {
         cleanFields()
         submitBtn.text = "Anunciar Oferta"
+    }
+
+    private fun enableSubmitButton() {
+        submitBtn.isEnabled = true
+        submitBtn.isClickable = true
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 }

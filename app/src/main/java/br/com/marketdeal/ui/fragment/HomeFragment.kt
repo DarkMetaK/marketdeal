@@ -8,15 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.Fragment
-import br.com.marketdeal.R
-import br.com.marketdeal.adapter.OfferAdapter
-import br.com.marketdeal.model.Offer
-import br.com.marketdeal.ui.activity.OfferActivity
+
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+
+import br.com.marketdeal.R
+import br.com.marketdeal.adapter.OfferAdapter
+import br.com.marketdeal.model.Offer
+import br.com.marketdeal.ui.activity.OfferActivity
 
 class HomeFragment : Fragment() {
     private val database by lazy { Firebase.database.reference }
@@ -27,7 +29,7 @@ class HomeFragment : Fragment() {
             val offerArray = ArrayList<Offer>()
 
             for (suggestionSnapshot in dataSnapshot.children) {
-                val offer = suggestionSnapshot.getValue(Offer::class.java);
+                val offer = suggestionSnapshot.getValue(Offer::class.java)
 
                 if (offer != null) {
                     offerArray.add(offer)
@@ -38,7 +40,7 @@ class HomeFragment : Fragment() {
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
-            Log.w("firebase", "loadProducts:onCancelled", databaseError.toException())
+            Log.w("firebase", "loadOffers:onCancelled", databaseError.toException())
         }
     }
 
@@ -65,7 +67,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun configListItemClick() {
-        offerList.setOnItemClickListener { adapterView, view, position, id ->
+        offerList.setOnItemClickListener { adapterView, view, position, _ ->
             val offer = adapterView.getItemAtPosition(position) as Offer
             val intent = Intent(view.context, OfferActivity::class.java)
             intent.putExtra("id", offer.uid)
