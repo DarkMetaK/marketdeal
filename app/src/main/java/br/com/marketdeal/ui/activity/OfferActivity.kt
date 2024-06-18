@@ -72,7 +72,6 @@ class OfferActivity : AppCompatActivity() {
 
             if (market != null) {
                 marketName.text = market.name
-                marketAddress.text = market.address
             }
         }.addOnFailureListener {
             Log.e("firebase", "Error getting market data", it)

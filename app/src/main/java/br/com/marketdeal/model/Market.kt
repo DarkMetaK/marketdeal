@@ -12,13 +12,6 @@ data class Market(
 
 ) {
 
-    @Exclude
-    fun toMap(): Map<String, Any?> {
-        return mapOf(
-            "uid" to id,
-            "name" to name,
-            "address" to address,
-        )
-    }
+
 
 }

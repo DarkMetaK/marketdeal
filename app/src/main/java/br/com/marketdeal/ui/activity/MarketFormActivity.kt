@@ -34,6 +34,13 @@ class MarketFormActivity : AppCompatActivity() {
         configInputs()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     private fun configInputs() {
         registerBtn.setOnClickListener {
             createMarket()

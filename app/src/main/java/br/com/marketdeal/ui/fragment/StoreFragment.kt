@@ -11,7 +11,10 @@ import androidx.fragment.app.Fragment
 import br.com.marketdeal.R
 import br.com.marketdeal.adapter.MarketAdapter
 import br.com.marketdeal.model.Market
+import br.com.marketdeal.model.Offer
+import br.com.marketdeal.ui.activity.MarketActivity
 import br.com.marketdeal.ui.activity.MarketFormActivity
+import br.com.marketdeal.ui.activity.OfferActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -55,6 +58,7 @@ class StoreFragment : Fragment(R.layout.fragment_store) {
         database.child("markets").addValueEventListener(marketListener)
         initializeFields(view)
         AddMarketBtnConfig()
+        configListItemClick()
         return view
     }
     private fun initializeFields(view: View) {
@@ -72,6 +76,16 @@ class StoreFragment : Fragment(R.layout.fragment_store) {
             val intent = Intent(requireActivity(), MarketFormActivity::class.java)
             startActivity(intent)
             requireActivity().finish()
+        }
+    }
+    private fun configListItemClick() {
+
+        marketList.setOnItemClickListener { adapterView, view, position, id ->
+            val market = adapterView.getItemAtPosition(position) as Market
+            val intent = Intent(view.context, MarketActivity::class.java)
+            intent.putExtra("id", market.id)
+
+            startActivity(intent)
         }
     }
 
