@@ -14,8 +14,11 @@ import br.com.marketdeal.R
 import br.com.marketdeal.model.User
 import br.com.marketdeal.ui.activity.SignInActivity
 import br.com.marketdeal.utils.MaskWatcher
+import com.google.android.gms.tasks.Tasks
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -26,22 +29,26 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class ProfileFragment : Fragment() {
-    private val userId by lazy { Firebase.auth.currentUser?.uid }
+    private val authUser by lazy { Firebase.auth.currentUser }
     private val database by lazy { Firebase.database.getReference("users") }
-    private val userTableRef by lazy { userId?.let { database.child(it) } }
+    private val userTableRef by lazy { authUser?.uid?.let { database.child(it) } }
     private val userListener = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val user = dataSnapshot.getValue<User>()
 
             if (user != null) {
                 loadUserData(user)
+                currentPassword = user.password
+                credentials = EmailAuthProvider.getCredential(user.email, user.password)
             }
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
-            Log.w("firebase", "loadPost:onCancelled", databaseError.toException())
+            Log.w("firebase", "loadUser:onCancelled", databaseError.toException())
         }
     }
+    private lateinit var currentPassword: String
+    private lateinit var credentials: AuthCredential
 
     private lateinit var nameLayout: TextInputLayout
     private lateinit var name: TextInputEditText
@@ -115,14 +122,10 @@ class ProfileFragment : Fragment() {
             it.isClickable = false
 
             if (validateFields()) {
-                updateUser { _ ->
-                    it.isEnabled = true
-                    it.isClickable = true
-                }
+                updateUser()
             } else {
                 showToast("Preencha todos os campos obrigatórios.")
-                it.isEnabled = true
-                it.isClickable = true
+                enableUpdateButton()
             }
         }
     }
@@ -132,10 +135,7 @@ class ProfileFragment : Fragment() {
             it.isEnabled = false
             it.isClickable = false
 
-            deleteDialog { _ ->
-                it.isEnabled = true
-                it.isClickable = true
-            }
+            deleteDialog()
         }
     }
 
@@ -146,24 +146,72 @@ class ProfileFragment : Fragment() {
         password.setText(user.password)
     }
 
-    private fun updateUser(callback: (Boolean) -> Unit) {
+    private fun updateUser() {
         val user = createUserModel()
-        val userValues = user.toMap()
+        val userUpdatedEmail = authUser!!.email != user.email
+        val userUpdatedPassword = currentPassword != user.password
 
-        val childUpdates = hashMapOf<String, Any>(
-            "/$userId" to userValues,
-        )
+        if (userUpdatedEmail || userUpdatedPassword) {
+            authUser!!.reauthenticate(credentials)
+                .addOnSuccessListener {
+                    val emailTask = if (userUpdatedEmail) {
+                        authUser!!.updateEmail(user.email)
+                    } else {
+                        Tasks.forResult(null)
+                    }
 
-        database.updateChildren(childUpdates)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    showToast("Perfil atualizado com sucesso!")
-                    callback(true)
-                } else {
-                    showToast("Falha ao atualizar os dados, por favor tente novamente.")
-                    callback(false)
+                    val passwordTask = if (userUpdatedPassword) {
+                        authUser!!.updatePassword(user.password)
+                    } else {
+                        Tasks.forResult(null)
+                    }
+
+                    Tasks.whenAllComplete(emailTask, passwordTask)
+                        .addOnCompleteListener { task ->
+                            val results = task.result
+                            val allSuccessful = results.all { it.isSuccessful }
+
+                            if (allSuccessful) {
+                                // Update the user model in the database
+                                database.child(authUser!!.uid).setValue(user)
+                                    .addOnSuccessListener {
+                                        showToast("Perfil atualizado com sucesso!")
+                                    }
+                                    .addOnFailureListener {
+                                        showToast("Falha ao atualizar os dados, por favor tente novamente.")
+                                    }
+                                    .addOnCompleteListener {
+                                        enableUpdateButton()
+                                    }
+                            } else {
+                                // Check individual task failures
+                                if (!emailTask.isSuccessful) {
+                                    showToast("Falha ao atualizar o e-mail")
+                                }
+                                if (!passwordTask.isSuccessful) {
+                                    showToast("Falha ao atualizar a senha")
+                                }
+                                enableUpdateButton()
+                            }
+                        }
                 }
-            }
+                .addOnFailureListener {
+                    showToast("Falha ao reautenticar, não foi possível atualizar e-mail ou senha")
+                    enableUpdateButton()
+                }
+        } else {
+            // No email or password update needed, just update the user model in the database
+            database.child(authUser!!.uid).setValue(user)
+                .addOnSuccessListener {
+                    showToast("Perfil atualizado com sucesso!")
+                }
+                .addOnFailureListener {
+                    showToast("Falha ao atualizar os dados, por favor tente novamente.")
+                }
+                .addOnCompleteListener {
+                    enableUpdateButton()
+                }
+        }
     }
 
     private fun createUserModel(): User {
@@ -172,7 +220,7 @@ class ProfileFragment : Fragment() {
         val emailStr = email.text.toString()
         val passwordStr = password.text.toString()
 
-        return User(userId!!, emailStr, nameStr, phoneStr, passwordStr)
+        return User(authUser!!.uid, emailStr, nameStr, phoneStr, passwordStr)
     }
 
     private fun validateFields(): Boolean {
@@ -222,22 +270,7 @@ class ProfileFragment : Fragment() {
         return amountOfErrors == 0
     }
 
-    private fun deleteUser(callback: (Boolean) -> Unit) {
-        val user = FirebaseAuth.getInstance().currentUser
-        user?.delete()
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    showToast("Perfil deletado com sucesso!")
-                    database.child(userId.toString()).removeValue()
-                    callback(true)
-                } else {
-                    showToast("Falha ao remover usuario.")
-                    callback(false)
-                }
-            }
-    }
-
-    private fun deleteDialog(callback: (Boolean) -> Unit) {
+    private fun deleteDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         builder
             .setMessage("Deseja realmente apagar sua conta?")
@@ -248,18 +281,29 @@ class ProfileFragment : Fragment() {
                         val intent = Intent(requireActivity(), SignInActivity::class.java)
                         startActivity(intent)
                         requireActivity().finish()
-                        callback(true)
-                    } else {
-                        callback(false)
                     }
                 }
             }
-            .setNegativeButton("Cancelar") { _, _ ->
-                callback(false)
-            }
+            .setNegativeButton("Cancelar") { _, _ -> }
 
         val dialog: AlertDialog = builder.create()
         dialog.show()
+        enableDeleteButton()
+    }
+
+    private fun deleteUser(callback: (Boolean) -> Unit) {
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.delete()
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    showToast("Perfil deletado com sucesso!")
+                    database.child(authUser!!.uid).removeValue()
+                    callback(true)
+                } else {
+                    showToast("Falha ao remover usuario.")
+                    callback(false)
+                }
+            }
     }
 
     private fun logout() {
@@ -275,6 +319,16 @@ class ProfileFragment : Fragment() {
         phoneLayout.error = null
         emailLayout.error = null
         passwordLayout.error = null
+    }
+
+    private fun enableUpdateButton() {
+        updateBtn.isEnabled = true
+        updateBtn.isClickable = true
+    }
+
+    private fun enableDeleteButton() {
+        deleteBtn.isEnabled = true
+        deleteBtn.isClickable = true
     }
 
     private fun showToast(message: String) {
